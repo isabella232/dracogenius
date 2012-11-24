@@ -1,0 +1,12 @@
+{
+	"folders":
+	[
+		{
+			"path": "./",
+      "file_exclude_patterns": [
+        "app/src/*.js",
+        "*.sublime-workspace"
+      ]
+		}
+	]
+}

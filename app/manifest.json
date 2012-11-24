@@ -1,0 +1,17 @@
+{
+  "name": "Magic Analyzer",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "A Magic the Gathering analysis and search tool.",
+  "icons": {
+  },
+  "app": {
+    "background": {
+      "scripts": ["src/init.js"],
+      "persistant": false
+    }
+  },
+  "permissions": [
+    "http://magiccards.info"
+  ]
+}
