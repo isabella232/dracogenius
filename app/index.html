@@ -1,8 +1,47 @@
-<html>
+<html ng-app='DG' ng-csp=''>
 <head>
   <title>Magic Analyzer</title>
+  <link rel="stylesheet" type="text/css"
+        href="lib/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css"
+        href="lib/font-awesome/css/font-awesome.css">
+  <style>
+    img.cardArt {
+      width:260;
+      height: 372;
+    }
+    .card {
+      font-style: bold;
+      float: left;
+    }
+  </style>
 </head>
+
 <body>
-  Hello World!
+  <script src='lib/angular.js'></script>
+  <script src="src/fetch.js"></script>
+  <script src="src/cards.js"></script>
+
+
+  <div ng-controller="CardSet">
+    <input ng-model="regex"></input>
+    <h3>Cards</h3>
+    <div ng-repeat="card in cards.slice(0,50)" class="card">
+      <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
+      <a href="{{card.link}}"><img class="cardArt" src="{{card.image}}"></a>
+      <!-- <pre>{{card.toJson(card)}}</pre> -->
+
+<!--       <div>
+        {{card.type}}
+
+        <span ng-show="card.castingCost">-- {{card.castingCost}}</span>
+        <br>
+        <b>{{card.abilities.join("&lt;br>")}}</b>
+        <br>
+        <i>{{card.flavorText}}</i>
+        <hr>
+      </div> -->
+    </div>
+  </div>
 </body>
 </html>

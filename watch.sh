@@ -1,8 +1,10 @@
 #! /bin/bash
 # requires inotify-tools: sudo apt-get install inotify-tools
-./build.sh
 
 while :; do
-  kqwait ./app/src/* ./app/lib/*
   ./build.sh
+  echo "Compile done."
+  echo ""
+
+  kqwait ./app/src/*.ts ./app/lib/*.ts ./app/lib/*.js
 done
