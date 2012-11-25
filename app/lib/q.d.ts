@@ -1,10 +1,11 @@
 module Q {
   export class Defer {
     resolve(arg:any);
+    reject(arg?:any);
     promise:Q.Promise;
   }
   export class Promise {
-    then(f:(arg:any)=>any):Q.Promise;
+    then(onSuccess:(arg:any)=>any, onFailure?:()=>any):Q.Promise;
     get(property: string): Q.Promise;
     done();
   }
