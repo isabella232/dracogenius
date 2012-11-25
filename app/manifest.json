@@ -6,12 +6,11 @@
   "icons": {
   },
   "app": {
-    "background": {
-      "scripts": ["src/init.js"],
-      "persistant": false
-    }
+    "launch": { "local_path": "index.html" }
   },
   "permissions": [
-    "http://magiccards.info"
+    "http://magiccards.info/",
+    "storage",
+    "unlimitedStorage"
   ]
 }
