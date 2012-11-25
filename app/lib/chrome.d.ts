@@ -12,4 +12,19 @@ module chrome {
       onLaunched: EventEmitter;
     };
   };
+
+  export interface storageArea {
+    get(key:string, callback:(value:any)=>void):void;
+    set(keyvalues:Object, callback?:()=>void);
+  };
+  export var storage: {
+    local: storageArea;
+  }
 }
+
+
+declare interface XMLHttpRequest {
+  overrideMimeType(type:string):void;
+}
+
+declare var unescape : (val:string)=>string;
