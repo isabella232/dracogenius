@@ -39,3 +39,45 @@ class Card {
     return JSON.stringify(obj, null, 2);
   }
 }
+
+class Query {
+  static parse(query:string):QueryPart {
+    if (!query || query === "") {
+      return new MatchAllQuery();
+    }
+    var r = /t\:("([^"]+)"|\S+)/g;
+    var match = query.match(r);
+    if (match) {
+      query.replace()
+    }
+  }
+}
+
+interface QueryPart {
+  match(card:Card):bool;
+}
+
+class MatchAllQuery implements QueryPart {
+  match(card:Card) {
+    return true;
+  }
+}
+
+class RegexQuery implements QueryPart {
+  regexp : RegExp;
+  constructor(regex:string) {
+    this.regexp = new RegExp(regex, 'i');
+  }
+  match(card:Card) {
+    return !!card.rawHtml.match(this.regexp);
+  }
+}
+
+function matchAll(needle:RegExp, haystack:string):string[][] {
+  var searcher = new RegExp(needle.source,
+                            'g' +
+                            (needle.ignoreCase ? 'i' : '') +
+                            (needle.multiline ? 'm' : ''));
+  var results = [];
+
+}

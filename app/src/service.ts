@@ -3,15 +3,9 @@ class CachingHttp {
 
   get(url:string, options={}) {
     var cacheKey = "cache:" + url;
-    console.log("trying from storage")
-    console.log(cacheKey);
     return this.getFromStorage(cacheKey).then(
-      (val)=>{
-        console.log("retrieved from storage");
-        return val;
-      },
+      (val)=> val ,
       ()=> {
-        console.log("not found in storage");
         var p = this.$http.get(url, options).then((resp) => resp.data);
         p.then((text) => this.setInStorage(cacheKey, text))
         return p;
@@ -23,11 +17,9 @@ class CachingHttp {
     var cacheKey = "cache:" + url;
     return this.getFromStorage(cacheKey).then(
       (val)=> {
-        console.log("got image from cache");
         return val;
       },
       () => {
-        console.log("could not get image from cache");
         var deferred = this.$q.defer();
         var img = new Image();
 
@@ -50,11 +42,8 @@ class CachingHttp {
 
   private getFromStorage(key:string) {
     var deferred = this.$q.defer();
-    console.log("fetching from storage")
     chrome.storage.local.get(key, (result) => { this.$rootScope.$apply(()=>{
-      console.log("got ", result, " from storage");
       if (key in result) {
-        console.log("resolving! with data of length", result[key].length);
         deferred.resolve(result[key]);
       } else {
         deferred.reject();
@@ -76,9 +65,7 @@ class CardFetcher {
   // Returns a promise of a Card[]
   getCards(set="m13"):angular.$q.promise {
     var url = "http://magiccards.info/query?q=e%3A" + set + "%2Fen&v=spoiler";
-    console.log("trying to get raw html");
     return this.CachingHttp.get(url).then((html) => {
-        console.log("Got raw html")
         return html
           // split into cards
           .match(/<td valign="top" width="25%">[^]+?<\/td>/gm)

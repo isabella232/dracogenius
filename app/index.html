@@ -1,10 +1,12 @@
 <html ng-app='DG' ng-csp=''>
 <head>
+  <meta charset="utf-8">
   <title>Magic Analyzer</title>
   <link rel="stylesheet" type="text/css"
         href="lib/bootstrap/css/bootstrap.css">
   <link rel="stylesheet" type="text/css"
         href="lib/font-awesome/css/font-awesome.css">
+
   <style>
     img.cardArt {
       width:260;
@@ -19,12 +21,19 @@
 
 <body>
   <script src='lib/angular.js'></script>
-  <script src="src/fetch.js"></script>
-  <script src="src/cards.js"></script>
+  <script src="src/service.js"></script>
+  <script src="src/model.js"></script>
+  <script src="src/controller.js"></script>
 
 
   <div ng-controller="CardSet">
     <input ng-model="regex"></input>
+    <h4>Stats</h4>
+    <ul>
+      <li ng-repeat="cmcCount in cmcHistogram">
+        {{cmcCount[0]}} – {{cmcCount[1]}}
+      </li>
+    </ul>
     <h3>Cards</h3>
     <div ng-repeat="card in cards.slice(0,50)" class="card">
       <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
