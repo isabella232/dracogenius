@@ -38,18 +38,84 @@ class Card {
     console.log(obj);
     return JSON.stringify(obj, null, 2);
   }
+
+  static parseCardHtml(cardHtml:string, CardFetcher:CardFetcher):Card {
+    var r = /<span style="font-size: 1.2em;"><a href="\/(.*?)\/en\/(\d+)\.html">(.*?)<\/a><\/span>/;
+    var match = cardHtml.match(r);
+    var name = match[3];
+    var edition_id = match[1];
+    var collectorsNumber = parseInt(match[2]);
+    r = /<p><img src="http:\/\/magiccards.info\/images\/en.gif" alt="English" width="16" height="11" class="flag2"> (.*?), <i>(.*?)<\/i><\/p>/;
+    match = cardHtml.match(r);
+    var edition = match[1];
+    var rarity = match[2];
+    r = /<p>(.*?), [\s\n]+ (X*[\dBWUGR]+)?( \((\d+)\))?<\/p>/;
+    match = cardHtml.match(r);
+    var type = match[1];
+    var castingCost = match[2];
+    var cmc = parseInt(match[4], 10);
+    if (isNaN(cmc)) {
+      cmc = null;
+    }
+    r = /<p class="ctext"><b>(.*?)<\/b><\/p>/;
+    match = cardHtml.match(r);
+    var abilities = [];
+    if (match) {
+      abilities = match[1].split("<br><br>");
+    }
+    r = /<p><i>(.*?)<\/i><\/p>/
+    match = cardHtml.match(r);
+    var flavorText = match[1];
+    r = /<p>Illus. (.*?)<\/p>/
+    match = cardHtml.match(r);
+    var illustrator = match[1];
+    var card = new Card(name, CardFetcher);
+    card.rawHtml = cardHtml;
+    card.abilities = abilities;
+    card.castingCost = castingCost;
+    card.cmc = cmc;
+    card.type = type;
+    card.printings.push({
+      edition: edition,
+      edition_id: edition_id,
+      rarity: rarity,
+      flavorText: flavorText,
+      illustrator: illustrator,
+      collectorsNumber: collectorsNumber
+    });
+    return card;
+  }
 }
 
 class Query {
-  static parse(query:string):QueryPart {
-    if (!query || query === "") {
+  static parse(search:string):QueryPart {
+    if (!search || search === "") {
       return new MatchAllQuery();
     }
-    var r = /t\:("([^"]+)"|\S+)/g;
-    var match = query.match(r);
-    if (match) {
-      query.replace()
+    var query = Query.useParser(search);
+    if (query) {
+      return query;
     }
+    return new RegexQuery(search);
+  }
+
+  static private useParser(query:string):QueryPart {
+    var identifier = withJoin(repeat1(range("A","z")));
+
+    var quoted = withAction(
+      sequence([ch('"'), withJoin(repeat(negate(ch('"')))), ch('"')]),
+      function(ast) { return ast[1]; });
+
+    var p = withAction(
+      sequence([token("t:"), choice([quoted, identifier])]),
+      function(ast) {return new TypeQuery(ast[1])}
+    );
+
+    var result = p(ps(query));
+    if (!result) {
+      return null;
+    }
+    return result.ast;
   }
 }
 
@@ -73,6 +139,14 @@ class RegexQuery implements QueryPart {
   }
 }
 
+class TypeQuery implements QueryPart {
+  constructor(public typeStr:string) {};
+
+  match(card:Card) {
+    return !!card.type.match(this.typeStr);
+  }
+}
+
 function matchAll(needle:RegExp, haystack:string):string[][] {
   var searcher = new RegExp(needle.source,
                             'g' +
@@ -80,4 +154,5 @@ function matchAll(needle:RegExp, haystack:string):string[][] {
                             (needle.multiline ? 'm' : ''));
   var results = [];
 
+  return results;
 }

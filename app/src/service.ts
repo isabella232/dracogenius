@@ -70,7 +70,7 @@ class CardFetcher {
           // split into cards
           .match(/<td valign="top" width="25%">[^]+?<\/td>/gm)
           // parse into Card objects
-          .map((card) => this.parseCardHtml(card));
+          .map((card) => Card.parseCardHtml(card, this));
     });
   }
 
@@ -86,53 +86,6 @@ class CardFetcher {
                + printing.edition_id + "/"
                + printing.collectorsNumber + ".jpg");
     return this.CachingHttp.getImage(url);
-  }
-
-  private parseCardHtml(cardHtml:string):Card {
-    var r = /<span style="font-size: 1.2em;"><a href="\/(.*?)\/en\/(\d+)\.html">(.*?)<\/a><\/span>/;
-    var match = cardHtml.match(r);
-    var name = match[3];
-    var edition_id = match[1];
-    var collectorsNumber = parseInt(match[2]);
-    r = /<p><img src="http:\/\/magiccards.info\/images\/en.gif" alt="English" width="16" height="11" class="flag2"> (.*?), <i>(.*?)<\/i><\/p>/;
-    match = cardHtml.match(r);
-    var edition = match[1];
-    var rarity = match[2];
-    r = /<p>(.*?), [\s\n]+ (X*[\dBWUGR]+)?( \((\d+)\))?<\/p>/;
-    match = cardHtml.match(r);
-    var type = match[1];
-    var castingCost = match[2];
-    var cmc = parseInt(match[4], 10);
-    if (isNaN(cmc)) {
-      cmc = null;
-    }
-    r = /<p class="ctext"><b>(.*?)<\/b><\/p>/;
-    match = cardHtml.match(r);
-    var abilities = [];
-    if (match) {
-      abilities = match[1].split("<br><br>");
-    }
-    r = /<p><i>(.*?)<\/i><\/p>/
-    match = cardHtml.match(r);
-    var flavorText = match[1];
-    r = /<p>Illus. (.*?)<\/p>/
-    match = cardHtml.match(r);
-    var illustrator = match[1];
-    var card = new Card(name, this);
-    card.rawHtml = cardHtml;
-    card.abilities = abilities;
-    card.castingCost = castingCost;
-    card.cmc = cmc;
-    card.type = type;
-    card.printings.push({
-      edition: edition,
-      edition_id: edition_id,
-      rarity: rarity,
-      flavorText: flavorText,
-      illustrator: illustrator,
-      collectorsNumber: collectorsNumber
-    });
-    return card;
   }
 }
 

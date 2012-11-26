@@ -1,17 +1,12 @@
 function CardSet(CardFetcher, $scope) {
   $scope.fullCards = CardFetcher.getCards();
   $scope.cards = $scope.fullCards;
-  $scope.$watch("regex", () => {
-    var r = new RegExp($scope.regex, "i");
-    Query.parse($scope.regex);
+  $scope.$watch("search", () => {
+    var query = Query.parse($scope.search);
     $scope.fullCards.then((fullCards:Card[]) => {
-      var result = [];
-      fullCards.forEach((card:Card) {
-        if (card.rawHtml.match(r)) {
-          result.push(card);
-        }
+      $scope.cards = fullCards.filter((card:Card) {
+        return query.match(card);
       });
-      $scope.cards = result;
     })
   });
 

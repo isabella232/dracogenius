@@ -1,3 +1,3 @@
 #! /bin/bash
 
-tsc --target ES5 app/lib/*.d.ts app/src/*.ts
+tsc --target ES5 app/lib/*.ts app/src/*.ts
