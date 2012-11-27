@@ -17,6 +17,18 @@ describe("Query Parser", function() {
       "t:Creature",
       ["Ajani's Sunstriker"],
       ["Akroma's Memorial"]
+    ],
+    [
+      "should ignore case when matching on type",
+      "t:creature",
+      ["Ajani's Sunstriker"],
+      ["Akroma's Memorial"]
+    ],
+    [
+      "should treat each word in a search separately, matching on all of them",
+      "ajani lifelink",
+      ["Ajani's Sunstriker"],
+      ["Ajani, Caller of the Pride", "Glorious Charge"]
     ]
   ];
 
@@ -38,7 +50,6 @@ describe("Query Parser", function() {
       var source = example[1];
       var acceptables = example[2];
       var rejectables = example[3];
-      var query = Query.parse(source);
       acceptables.forEach(function(acceptable) {
         expect(source).shouldMatch(acceptable);
       });
@@ -52,18 +63,33 @@ describe("Query Parser", function() {
 
 describe("Parser Tests", function() {
   it("should parse t:any", function() {
-    var identifier = withJoin(repeat1(range("A","z")));
+    var word = withJoin(repeat1(negate(choice([" ", "\t", "\n"].map(ch)))));
 
     var quoted = withAction(
       sequence([ch('"'), withJoin(repeat(negate(ch('"')))), ch('"')]),
       function(ast) { return ast[1]; });
 
-    var p = withAction(
-      sequence([token("t:"), choice([quoted, identifier])]),
+    var search_token = choice([quoted, word]);
+
+    var typeSearch = withAction(
+      sequence([token("t:"), search_token]),
       function(ast) {return new TypeQuery(ast[1])}
     );
-    var input = ps('t:"abc def"');
 
-    expect(p(input).ast).toEqual(new TypeQuery("abc def"))
-  });
+    var normalSearch = withAction(search_token, function(str) {
+      return new RegexQuery(str);
+    });
+
+    var singleSearchTerm = whitespace(choice([typeSearch, normalSearch]));
+
+    var searchCombiner = withAction(repeat(singleSearchTerm),
+      function (terms) {
+        return terms;
+      }
+    );
+
+    var input = ps('ajani lifelink');
+
+    //expect(searchCombiner(input).ast).toEqual([]);//new RegexQuery('lol'), new TypeQuery("abc def"), new RegexQuery('butts')])
+    });
 });

@@ -30,6 +30,7 @@
   <div ng-controller="CardSet">
     <input ng-model="search"></input>
     <h4>Stats</h4>
+    <div>Count: <strong>{{cards.length}}</strong></div>
     <ul>
       <li ng-repeat="cmcCount in cmcHistogram">
         {{cmcCount[0]}} – {{cmcCount[1]}}

@@ -89,33 +89,50 @@ class Card {
 
 class Query {
   static parse(search:string):QueryPart {
-    if (!search || search === "") {
-      return new MatchAllQuery();
-    }
-    var query = Query.useParser(search);
-    if (query) {
-      return query;
-    }
-    return new RegexQuery(search);
-  }
-
-  static private useParser(query:string):QueryPart {
-    var identifier = withJoin(repeat1(range("A","z")));
+    var word = withJoin(repeat1(negate(choice([" ", "\t", "\n"].map(ch)))));
 
     var quoted = withAction(
       sequence([ch('"'), withJoin(repeat(negate(ch('"')))), ch('"')]),
       function(ast) { return ast[1]; });
 
-    var p = withAction(
-      sequence([token("t:"), choice([quoted, identifier])]),
+    var search_token = choice([quoted, word]);
+
+    var typeSearch = withAction(
+      sequence([token("t:"), search_token]),
       function(ast) {return new TypeQuery(ast[1])}
     );
 
-    var result = p(ps(query));
-    if (!result) {
-      return null;
+    var normalSearch = withAction(search_token, function(str) {
+      return new RegexQuery(str);
+    });
+
+    var singleSearchTerm = whitespace(choice([typeSearch, normalSearch]));
+
+    var searchCombiner = withAction(repeat(singleSearchTerm),
+      function (queries:QueryPart[]):QueryPart {
+        if (!queries) {
+          return new MatchAllQuery();
+        }
+        if (queries.length === 1) {
+          return queries[0];
+        }
+        return Query.and(queries);
+      }
+    );
+
+    return searchCombiner(ps(search)).ast;
+  }
+
+  static and(queries:QueryPart[]):QueryPart {
+    return {
+      match: (card:Card) {
+        var matched = true;
+        queries.forEach((query) => {
+          matched = matched && query.match(card);
+        });
+        return matched;
+      }
     }
-    return result.ast;
   }
 }
 
@@ -135,24 +152,18 @@ class RegexQuery implements QueryPart {
     this.regexp = new RegExp(regex, 'i');
   }
   match(card:Card) {
-    return !!card.rawHtml.match(this.regexp);
+    return this.regexp.test(card.rawHtml);
   }
 }
 
 class TypeQuery implements QueryPart {
-  constructor(public typeStr:string) {};
+  regexp : RegExp;
+  constructor(typeStr:string) {
+    this.regexp = new RegExp(typeStr, 'i');
+  };
 
   match(card:Card) {
-    return !!card.type.match(this.typeStr);
+    return this.regexp.test(card.type);
   }
 }
 
-function matchAll(needle:RegExp, haystack:string):string[][] {
-  var searcher = new RegExp(needle.source,
-                            'g' +
-                            (needle.ignoreCase ? 'i' : '') +
-                            (needle.multiline ? 'm' : ''));
-  var results = [];
-
-  return results;
-}
