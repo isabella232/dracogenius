@@ -46,7 +46,7 @@
     <h3>Cards</h3>
     <div ng-repeat="card in cards.slice(0,50)" class="card">
       <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
-      <a href="{{card.link}}"><img class="cardArt" src="{{card.image}}"></a>
+      <a href="{{card.link}}"><img class="cardArt" ng-src="{{card.image}}"></a>
       <!-- <pre>{{card.toJson(card)}}</pre> -->
 
 <!--       <div>
