@@ -2,7 +2,7 @@ interface CardPrinting {
   edition_id: string;
   edition: string;
   rarity: string;
-  collectorsNumber: number;
+  collectorsNumber: string; // two sided cards have an 'a' and a 'b' side
   flavorText: string;
   illustrator: string;
 };
@@ -40,16 +40,16 @@ class Card {
   }
 
   static parseCardHtml(cardHtml:string, CardFetcher:CardFetcher):Card {
-    var r = /<span style="font-size: 1.2em;"><a href="\/(.*?)\/en\/(\d+)\.html">(.*?)<\/a><\/span>/;
+    var r = /<span style="font-size: 1.2em;"><a href="\/(.*?)\/en\/(\d+[ab]?)\.html">(.*?)<\/a><\/span>/;
     var match = cardHtml.match(r);
     var name = match[3];
     var edition_id = match[1];
-    var collectorsNumber = parseInt(match[2]);
+    var collectorsNumber = match[2];
     r = /<p><img src="http:\/\/magiccards.info\/images\/en.gif" alt="English" width="16" height="11" class="flag2"> (.*?), <i>(.*?)<\/i><\/p>/;
     match = cardHtml.match(r);
     var edition = match[1];
     var rarity = match[2];
-    r = /<p>(.*?), [\s\n]+ (X*[\dBWUGR]+)?( \((\d+)\))?<\/p>/;
+    r = /<p>(.*?),[\s\n]+ (X*[\d\{\}\/BWUGR]+)?( \((\d+)\))?<\/p>/;
     match = cardHtml.match(r);
     var type = match[1];
     var castingCost = match[2];

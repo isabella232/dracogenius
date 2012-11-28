@@ -29,16 +29,20 @@
 
   <div ng-controller="CardSet">
     <input ng-model="search"></input>
-    <h4>Stats</h4>
     <div>
       <strong>{{cards.length}}</strong> cards<span ng-show="search.length">
         match your search</span>.
     </div>
-    <ul>
-      <li ng-repeat="cmcCount in cmcHistogram">
-        {{cmcCount[0]}} – {{cmcCount[1]}}
-      </li>
-    </ul>
+    <hr>
+    <h4>Stats</h4>
+    <div class="facet">
+      <label>Converted Mana Cost:</label>
+      <ul>
+        <li ng-repeat="cmcCount in cmcHistogram">
+          {{cmcCount[0]}} – {{cmcCount[1]}}
+        </li>
+      </ul>
+    </div>
     <h3>Cards</h3>
     <div ng-repeat="card in cards.slice(0,50)" class="card">
       <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->

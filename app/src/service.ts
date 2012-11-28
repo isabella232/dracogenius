@@ -70,7 +70,14 @@ class CardFetcher {
           // split into cards
           .match(/<td valign="top" width="25%">[^]+?<\/td>/gm)
           // parse into Card objects
-          .map((card) => Card.parseCardHtml(card, this));
+          .map((card) => {
+            try {
+              return Card.parseCardHtml(card, this)
+            } catch(e) {
+              console.log("can't parse card", JSON.stringify(card), " got error", e);
+              throw e;
+            }
+          });
     });
   }
 
