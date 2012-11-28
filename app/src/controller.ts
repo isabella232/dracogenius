@@ -43,7 +43,7 @@ function CardSet(CardFetcher, $scope) {
       });
       var rarityHistogramKeyValues = objectToKeyValues(rarityHistogram);
       rarityHistogramKeyValues.sort((a, b) => {
-        var rarities = ["Land", "Common", "Uncommon", "Rare", "Mythic Rare"];
+        var rarities = ["Land", "Common", "Uncommon", "Rare", "Mythic Rare"]
         var aV = rarities.indexOf(a[0]);
         var bV = rarities.indexOf(b[0]);
         return aV - bV;
@@ -82,7 +82,7 @@ function CardSet(CardFetcher, $scope) {
     updateCardSubset();
   };
 
-  var activeSets = ["m13", "isd", "rtr", "avr"];
+  var activeSets = ["m13", "isd", "rtr", "avr", "dka"];
   activeSets.forEach(function(set:string) {
     CardFetcher.getCards(set).then((cards) => {
       $scope.addCards(cards);
