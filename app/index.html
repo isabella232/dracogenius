@@ -23,6 +23,9 @@
       float: left;
       margin-right: 15px;
     }
+    .facet td {
+      padding-right: 20px;
+    }
     .endStats {
       clear: both;
     }
@@ -41,19 +44,19 @@
     <h4>Stats</h4>
     <div class="facet">
       <label>Converted Mana Cost:</label>
-      <ul>
-        <li ng-repeat="cmcCount in cmcHistogram">
-          {{cmcCount[0]}} – {{cmcCount[1]}}
-        </li>
-      </ul>
+      <table>
+        <tr ng-repeat="cmcCount in cmcHistogram">
+          <td>{{cmcCount[0]}}</td><td>{{cmcCount[1]}}</td>
+        </tr>
+      </table>
     </div>
     <div class="facet">
       <label>Rarity:</label>
-      <ul>
-        <li ng-repeat="rarityCount in rarityHistogram">
-          {{rarityCount[0]}} – {{rarityCount[1]}}
-        </li>
-      </ul>
+      <table>
+        <tr ng-repeat="rarityCount in rarityHistogram">
+          <td>{{rarityCount[0]}}</td><td>{{rarityCount[1]}}</td>
+        </tr>
+      </table>
     </div>
     <div class="endStats"></div>
     <h3>Cards</h3>
