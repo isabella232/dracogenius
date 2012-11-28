@@ -65,26 +65,51 @@ describe("Card.parseCardHtml", function() {
     [
        "Azor's Elocutors",
        {
-         "castingCost": "3{W/U}{W/U}",
-         "cmc": 5
+         castingCost: "3{W/U}{W/U}",
+         cmc: 5
        }
     ],
     [
       "Yeva, Nature's Herald",
       {
-        "castingCost": "2GG",
-        "cmc": 4,
+        castingCost: "2GG",
+        cmc: 4,
       }
     ],
+    [
+      "Garruk Relentless",
+      {
+        printings: {
+          collectorsNumber: "181a",
+          illustrator: "Eric Deschamps",
+          rarity: "Mythic Rare"
+        }
+      }
+    ]
   ]
   examples.forEach((ex) => {
     var name = ex[0];
     var properties = ex[1];
 
     objForEach(properties, (key, value) => {
-      it("should parse `" + name + "`s " + key + " as " + value, () => {
-        expect(cardsByName[name][key]).toEqual(value);
-      });
+      if (key === "printings") {
+        it("should parse `" + name + "` as having a printing with values " +
+           value, () => {
+          var card = <Card>cardsByName[name];
+          expect(card.printings.length).toBe(1); // this test will need more
+                                                 // work to support multiple
+                                                 // printings
+          var printing = card.printings[0];
+          objForEach(value, (key, pr_value) => {
+            expect(printing[key]).toEqual(pr_value);
+          });
+        })
+      } else {
+        it("should parse `" + name + "`s " + key + " as " + value, () => {
+          expect(cardsByName[name][key]).toEqual(value);
+        });
+
+      }
     });
   });
 });
