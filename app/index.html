@@ -8,6 +8,9 @@
         href="lib/font-awesome/css/font-awesome.css">
 
   <style>
+    .cardSet {
+      margin: 20px;
+    }
     img.cardArt {
       width:260;
       height: 372;
@@ -16,18 +19,19 @@
       font-style: bold;
       float: left;
     }
+    .facet {
+      float: left;
+      margin-right: 15px;
+    }
+    .endStats {
+      clear: both;
+    }
   </style>
 </head>
 
 <body>
-  <script src='lib/angular.js'></script>
-  <script src="lib/jsparse.js"></script>
-  <script src="src/service.js"></script>
-  <script src="src/model.js"></script>
-  <script src="src/controller.js"></script>
 
-
-  <div ng-controller="CardSet">
+  <div class="cardSet" ng-controller="CardSet">
     <input ng-model="search"></input>
     <div>
       <strong>{{cards.length}}</strong> cards<span ng-show="search.length">
@@ -43,6 +47,15 @@
         </li>
       </ul>
     </div>
+    <div class="facet">
+      <label>Rarity:</label>
+      <ul>
+        <li ng-repeat="rarityCount in rarityHistogram">
+          {{rarityCount[0]}} – {{rarityCount[1]}}
+        </li>
+      </ul>
+    </div>
+    <div class="endStats"></div>
     <h3>Cards</h3>
     <div ng-repeat="card in cards.slice(0,50)" class="card">
       <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
@@ -61,5 +74,11 @@
       </div> -->
     </div>
   </div>
+
+  <script src='lib/angular.js'></script>
+  <script src="lib/jsparse.js"></script>
+  <script src="src/service.js"></script>
+  <script src="src/model.js"></script>
+  <script src="src/controller.js"></script>
 </body>
 </html>
