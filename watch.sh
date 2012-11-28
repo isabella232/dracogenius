@@ -1,15 +1,17 @@
 #! /bin/bash
 # requires inotify-tools: sudo apt-get install inotify-tools
 
-# Kill testacular when this script exits
-trap 'kill $(jobs -p)' EXIT
-
-testacular start &
-
 while :; do
+  echo ""
+  echo ""
+  echo ""
+
   ./build.sh
+
   echo "Compile done."
   echo ""
 
-  kqwait ./app/src/*.ts ./app/lib/*.ts ./app/lib/*.js
+  testacular start --single-run
+
+  kqwait ./app/src/*.ts ./app/lib/*.ts ./app/lib/*.js ./test/*.ts
 done
