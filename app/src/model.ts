@@ -15,6 +15,7 @@ class Card {
   castingCost: string;
   cmc: number;
   type: string;
+  tags: string[] = [];
 
   constructor(name:string, private CardFetcher:CardFetcher) {
     this.name = name;

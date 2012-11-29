@@ -26,5 +26,6 @@ declare module angular {
   interface $q {
     defer():$q.deferred;
     resolve(val:any):$q.promise;
+    all(promises:angular.$q.promise[]):angular.$q.promise;
   }
 }

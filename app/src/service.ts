@@ -1,52 +1,10 @@
-var cachingHttp;
-class CachingHttp {
-  constructor(private $http : angular.$http, private $q : angular.$q, private $rootScope) {
-    cachingHttp = this;
-  };
-
+class PermanantStorage {
   private asyncQueue : Object = {};
   private timeout = null;
 
-  get(url:string, options={}) {
-    var cacheKey = "cache:" + url;
-    return this.getFromStorage(cacheKey).then(
-      (val)=> val ,
-      ()=> {
-        var p = this.$http.get(url, options).then((resp) => resp.data);
-        p.then((text) => this.setInStorage(cacheKey, text))
-        return p;
-      }
-    );
-  }
+  constructor(private $q : angular.$q, private $rootScope) {};
 
-  getImage(url:string) {
-    var cacheKey = "cache:" + url;
-    return this.getFromStorage(cacheKey).then(
-      (val)=> {
-        return val;
-      },
-      () => {
-        var deferred = this.$q.defer();
-        var img = new Image();
-
-        img.onload = ()=> { this.$rootScope.$apply(() => {
-          var canvas = <CanvasElement> document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          var ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, img.width, img.height);
-          var result : string = canvas.toDataURL("image/jpeg");
-          this.setInStorage(cacheKey, result);
-          deferred.resolve(result);
-        })};
-        img.src = url;
-        return deferred.promise;
-      }
-    )
-
-  }
-
-  private getFromStorage(key:string) {
+  getFromStorage(key:string) {
     var deferred = this.$q.defer();
     if (!(key in this.asyncQueue)) {
       this.asyncQueue[key] = [];
@@ -57,13 +15,13 @@ class CachingHttp {
     return deferred.promise;
   }
 
-  private ensureWillGetFromStorage() {
+  ensureWillGetFromStorage() {
     if (this.timeout === null) {
       this.timeout = setTimeout(() => this.reallyGetFromStorage(), 30);
     }
   }
 
-  private reallyGetFromStorage() {
+  reallyGetFromStorage() {
     var query = [];
     var limit = 20;
     for (var key in this.asyncQueue) {
@@ -95,32 +53,88 @@ class CachingHttp {
     })});
   }
 
-  private setInStorage(key, value) {
+  setInStorage(key, value) {
     var setObj = {};
     setObj[key] = value;
     chrome.storage.local.set(setObj);
   }
 }
 
+class CachingHttp {
+  constructor(private $http : angular.$http, private $q : angular.$q, private $rootScope, private PermanantStorage : PermanantStorage) {
+  };
+
+  get(url:string, options={}) {
+    var cacheKey = "cache:" + url;
+    return this.PermanantStorage.getFromStorage(cacheKey).then(
+      (val)=> val ,
+      ()=> {
+        var p = this.$http.get(url, options).then((resp) => resp.data);
+        p.then((text) => this.PermanantStorage.setInStorage(cacheKey, text))
+        return p;
+      }
+    );
+  }
+
+  getImage(url:string) {
+    var cacheKey = "cache:" + url;
+    return this.PermanantStorage.getFromStorage(cacheKey).then(
+      (val)=> {
+        return val;
+      },
+      () => {
+        var deferred = this.$q.defer();
+        var img = new Image();
+
+        img.onload = ()=> { this.$rootScope.$apply(() => {
+          var canvas = <CanvasElement> document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, img.width, img.height);
+          var result : string = canvas.toDataURL("image/jpeg");
+          this.PermanantStorage.setInStorage(cacheKey, result);
+          deferred.resolve(result);
+        })};
+        img.src = url;
+        return deferred.promise;
+      }
+    )
+  }
+}
+
 class CardFetcher {
-  constructor(private CachingHttp : CachingHttp) {};
+  constructor(private CachingHttp : CachingHttp,
+              private PermanantStorage : PermanantStorage,
+              private $q : angular.$q) {};
+
+  tags = {};
 
   // Returns a promise of a Card[]
   getCards(set="m13"):angular.$q.promise {
     var url = "http://magiccards.info/query?q=e%3A" + set + "%2Fen&v=spoiler";
-    return this.CachingHttp.get(url).then((html) => {
+
+    var htmlPromise = this.CachingHttp.get(url);
+    var tagsPromise = pOr(this.PermanantStorage.getFromStorage("tags"), {}, this.$q);
+    return this.$q.all([htmlPromise, tagsPromise]).then((values) => {
+        var html = values[0];
+        this.tags = values[1];
         return html
           // split into cards
           .match(/<td valign="top" width="25%">[^]+?<\/td>/gm)
           // parse into Card objects
           .map((card) => {
             try {
-              return Card.parseCardHtml(card, this)
+              var card = Card.parseCardHtml(card, this)
+              if (card.name in this.tags) {
+                card.tags = this.tags[card.name];
+              }
+              return card;
             } catch(e) {
               console.log("can't parse card", JSON.stringify(card), " got error", e);
               throw e;
             }
-          });
+          })
     });
   }
 
@@ -137,24 +151,42 @@ class CardFetcher {
                + printing.collectorsNumber + ".jpg");
     return this.CachingHttp.getImage(url);
   }
+
+  setTags(card:Card, tags:string[]) {
+    this.tags[card.name] = tags;
+    this.PermanantStorage.setInStorage("tags", this.tags);
+  }
 }
 
 
 var DGservice = angular.module('DG.service', []);
 DGservice.factory('CachingHttp',
-  ($http:angular.$http, $q:angular.$q, $rootScope) => {
-    return new CachingHttp($http, $q, $rootScope);
+  ($http:angular.$http, $q:angular.$q, $rootScope, PermanantStorage:PermanantStorage) => {
+    return new CachingHttp($http, $q, $rootScope, PermanantStorage);
   }
 );
-DGservice.factory('CardFetcher', (CachingHttp) => {
-  return new CardFetcher(CachingHttp);
+DGservice.factory('CardFetcher', (CachingHttp:CachingHttp, PermanantStorage:PermanantStorage, $q) => {
+  return new CardFetcher(CachingHttp, PermanantStorage, $q);
 });
+DGservice.factory('PermanantStorage', ($q, $rootScope) => {
+  return new PermanantStorage($q, $rootScope);
+})
 
-var DracoGenius = angular.module('DG', ['DG.service', 'scroll']);
+var DracoGenius = angular.module('DG', ['DG.service', 'scroll', 'ui']);
 
 function isObjectEmpty(obj:Object) {
   for (var key in obj) {
     return false;
   }
   return true;
+}
+
+function pOr(p:angular.$q.promise, fallback:any, $q):angular.$q.promise {
+  var deferred = $q.defer();
+  p.then((value) => {
+    deferred.resolve(value);
+  }, () => {
+    deferred.resolve(fallback);
+  })
+  return deferred.promise;
 }

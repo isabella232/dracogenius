@@ -6,6 +6,8 @@
         href="lib/bootstrap/css/bootstrap.css">
   <link rel="stylesheet" type="text/css"
         href="lib/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css"
+        href="lib/angular-ui.css">
 
   <style>
     .cardSet {
@@ -29,56 +31,79 @@
     .endStats {
       clear: both;
     }
+    .tagEnterer {
+      width: 500px;
+      margin-top: 5px;
+    }
+    .singleCardTaggingPanel {
+      font-style: bold;
+    }
   </style>
 </head>
 
 <body>
 
   <div class="cardSet" ng-controller="CardSet" when-scrolled='onScrolledToBottom()'>
-    <input ng-model="search"></input>
-    <div>
-      <strong>{{cards.length}}</strong> cards<span ng-show="search.length">
-        match your search</span>.
+    <div class="singleCardTaggingPanel">
+      <center>
+        <div>
+          <a href="{{tagCard.link}}" target="_blank">
+            <img ng-src="{{tagCard.image}}" width='500'>
+          </a>
+          <br>
+          <input ng-model="tagCardTagString" autofocus="autofocus"
+                 ui-keypress="{'enter':'tagEntered($event)'}"
+                 class="tagEnterer"></input>
+        </div>
+      </center>
     </div>
-    <hr>
-    <h4>Stats</h4>
-    <div class="facet">
-      <label>Converted Mana Cost:</label>
-      <table>
-        <tr ng-repeat="cmcCount in cmcHistogram">
-          <td>{{cmcCount[0]}}</td><td>{{cmcCount[1]}}</td>
-        </tr>
-      </table>
-    </div>
-    <div class="facet">
-      <label>Rarity:</label>
-      <table>
-        <tr ng-repeat="rarityCount in rarityHistogram">
-          <td>{{rarityCount[0]}}</td><td>{{rarityCount[1]}}</td>
-        </tr>
-      </table>
-    </div>
-    <div class="endStats"></div>
-    <h3>Cards</h3>
-    <div ng-repeat="card in cards.slice(0,limit)" class="card">
-      <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
-      <a href="{{card.link}}"><img class="cardArt" ng-src="{{card.image}}"></a>
-      <!-- <pre>{{card.toJson(card)}}</pre> -->
+    <div class="searchPanel" ng-show='false'>
+      <input ng-model="search"></input>
+      <div>
+        <strong>{{cards.length}}</strong> cards<span ng-show="search.length">
+          match your search</span>.
+      </div>
+      <hr>
+      <h4>Stats</h4>
+      <div class="facet">
+        <label>Converted Mana Cost:</label>
+        <table>
+          <tr ng-repeat="cmcCount in cmcHistogram">
+            <td>{{cmcCount[0]}}</td><td>{{cmcCount[1]}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="facet">
+        <label>Rarity:</label>
+        <table>
+          <tr ng-repeat="rarityCount in rarityHistogram">
+            <td>{{rarityCount[0]}}</td><td>{{rarityCount[1]}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="endStats"></div>
+      <h3>Cards</h3>
+      <div ng-repeat="card in cards.slice(0,limit)" class="card">
+        <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
+        <a href="{{card.link}}"><img class="cardArt" ng-src="{{card.image}}"></a>
+        <!-- <pre>{{card.toJson(card)}}</pre> -->
 
-<!--       <div>
-        {{card.type}}
+  <!--       <div>
+          {{card.type}}
 
-        <span ng-show="card.castingCost"> {{card.castingCost}}</span>
-        <br>
-        <b>{{card.abilities.join("&lt;br>")}}</b>
-        <br>
-        <i>{{card.flavorText}}</i>
-        <hr>
-      </div> -->
+          <span ng-show="card.castingCost"> {{card.castingCost}}</span>
+          <br>
+          <b>{{card.abilities.join("&lt;br>")}}</b>
+          <br>
+          <i>{{card.flavorText}}</i>
+          <hr>
+        </div> -->
+      </div>
     </div>
   </div>
 
   <script src='lib/angular.js'></script>
+  <script src='lib/angular-ui.js'></script>
   <script src="lib/jsparse.js"></script>
   <script src="src/service.js"></script>
   <script src="src/model.js"></script>

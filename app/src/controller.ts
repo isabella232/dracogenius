@@ -17,6 +17,41 @@ function CardSet(CardFetcher, $scope) {
     }
   }
 
+  var tagCardIndex = 0;
+  $scope.chooseTagCard = () => {
+    $scope.tagCard = null;
+    for (;tagCardIndex < $scope.cards.length * 10; tagCardIndex++) {
+      var card = $scope.cards[tagCardIndex % $scope.cards.length];
+      if (card.tags.length === 0) {
+        $scope.tagCard = card;
+        break;
+      }
+    }
+  }
+  $scope.$watch("cards", () => {
+    if (!$scope.tagCard) {
+      $scope.chooseTagCard();
+    }
+  });
+  $scope.$watch("tagCard", () => {
+    if (!$scope.tagCard) {
+      return;
+    }
+    $scope.tagCardTagString = $scope.tagCard.tags.join(", ");
+  });
+  $scope.tagEntered = () => {
+    var tags = $scope.tagCardTagString
+        .split(",")
+        .map((tag:string) => tag.trim())
+        .filter((tag:string) => tag.length > 0);
+    console.log("tags:", tags);
+    $scope.tagCard.tags = tags;
+    CardFetcher.setTags($scope.tagCard, tags);
+
+    tagCardIndex++;
+    $scope.chooseTagCard();
+  }
+
   $scope.onScrolledToBottom = function() {
     $scope.limit = Math.min($scope.limit + 20, $scope.cards.length);
   }
@@ -53,7 +88,7 @@ function CardSet(CardFetcher, $scope) {
         var aV = rarities.indexOf(a[0]);
         var bV = rarities.indexOf(b[0]);
         return aV - bV;
-      })
+      });
       $scope.cmcHistogram = cmcHistogramKeyValues;
       $scope.rarityHistogram = rarityHistogramKeyValues;
     }
@@ -114,3 +149,10 @@ angular.module('scroll', []).directive('whenScrolled', function() {
     };
   };
 });
+
+function randomPick(arr:any[]):any {
+  if (arr.length === 0) {
+    return undefined;
+  }
+  return arr[Math.round(Math.random() * (arr.length - 1))];
+}
