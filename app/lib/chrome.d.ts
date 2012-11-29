@@ -14,7 +14,8 @@ module chrome {
   };
 
   export interface storageArea {
-    get(key:string, callback:(value:any)=>void):void;
+    get(keys:string[], callback:(value:Object)=>void):void;
+    get(key:string, callback:(value:Object)=>void):void;
     set(keyvalues:Object, callback?:()=>void);
   };
   export var storage: {

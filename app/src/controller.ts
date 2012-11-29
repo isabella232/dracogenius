@@ -88,7 +88,7 @@ function CardSet(CardFetcher, $scope) {
     updateCardSubset();
   };
 
-  var activeSets = ["m13", "isd", "rtr", "avr", "dka"];
+  var activeSets = ["m13"]//, "isd", "rtr", "avr", "dka"];
   activeSets.forEach(function(set:string) {
     CardFetcher.getCards(set).then((cards) => {
       $scope.addCards(cards);
