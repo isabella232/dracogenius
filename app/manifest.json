@@ -3,11 +3,11 @@
   "version": "0.3.1",
   "manifest_version": 2,
   "description": "A Magic the Gathering analysis and search tool.",
-  "icon": {
+  "icons": {
     "128": "icons/128.png",
-    "64": "icons/64.png",
-    "48": "icons/48.png",
-    "16": "icons/16.png"
+     "64": "icons/64.png",
+     "48": "icons/48.png",
+     "16": "icons/16.png"
   },
   "app": {
     "launch": { "local_path": "index.html" }

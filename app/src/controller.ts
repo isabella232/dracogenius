@@ -4,6 +4,7 @@ function CardSet(CardFetcher, $scope) {
   $scope.cards = [];
   $scope.search = "";
   $scope.limit = 20;
+  $scope.mode = 'search'
 
   function updateCardSubset() {
     $scope.limit = 20;
@@ -54,7 +55,9 @@ function CardSet(CardFetcher, $scope) {
   }
 
   $scope.onScrolledToBottom = function() {
-    $scope.limit = Math.min($scope.limit + 20, $scope.cards.length);
+    if ($scope.mode == 'search') {
+      $scope.limit = Math.min($scope.limit + 20, $scope.cards.length);
+    }
   }
 
   $scope.$watch("search", updateCardSubset);
