@@ -3,6 +3,7 @@ declare module angular {
   export var module : (name:string, deps:string[])=>Module;
   export interface Module {
     factory(name:string, factImpl:Function);
+    directive(name:string, impl:Function);
   }
 
   export interface $http {

@@ -23,8 +23,16 @@ module chrome {
 }
 
 
-declare interface XMLHttpRequest {
-  overrideMimeType(type:string):void;
-}
+// The following are hacky hacky hacks. If you're feeling virtuous,
+// delete them here, then improve all of the code that starts throwing
+// warnings.
 
 declare var unescape : (val:string)=>string;
+
+declare interface Window {
+  scrollY : number;
+}
+
+declare interface Document {
+  height: number;
+}

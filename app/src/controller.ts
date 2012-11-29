@@ -3,8 +3,10 @@ function CardSet(CardFetcher, $scope) {
   $scope.fullCards = fullCards;
   $scope.cards = [];
   $scope.search = "";
+  $scope.limit = 20;
 
   function updateCardSubset() {
+    $scope.limit = 20;
     var query = Query.parse($scope.search);
     $scope.cards = [];
     for (var name in $scope.fullCards) {
@@ -13,6 +15,10 @@ function CardSet(CardFetcher, $scope) {
         $scope.cards.push(card);
       };
     }
+  }
+
+  $scope.onScrolledToBottom = function() {
+    $scope.limit = Math.min($scope.limit + 20, $scope.cards.length);
   }
 
   $scope.$watch("search", updateCardSubset);
@@ -97,3 +103,14 @@ function objectToKeyValues(obj:Object) {
   }
   return result;
 }
+
+angular.module('scroll', []).directive('whenScrolled', function() {
+  return (scope, elm, attr) => {
+    window.onscroll = () => {
+      if (window.scrollY + window.innerHeight >=
+          document.height - window.innerHeight) {
+        scope.$apply(attr.whenScrolled);
+      }
+    };
+  };
+});

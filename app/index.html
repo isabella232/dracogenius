@@ -34,7 +34,7 @@
 
 <body>
 
-  <div class="cardSet" ng-controller="CardSet">
+  <div class="cardSet" ng-controller="CardSet" when-scrolled='onScrolledToBottom()'>
     <input ng-model="search"></input>
     <div>
       <strong>{{cards.length}}</strong> cards<span ng-show="search.length">
@@ -60,7 +60,7 @@
     </div>
     <div class="endStats"></div>
     <h3>Cards</h3>
-    <div ng-repeat="card in cards.slice(0,50)" class="card">
+    <div ng-repeat="card in cards.slice(0,limit)" class="card">
       <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
       <a href="{{card.link}}"><img class="cardArt" ng-src="{{card.image}}"></a>
       <!-- <pre>{{card.toJson(card)}}</pre> -->

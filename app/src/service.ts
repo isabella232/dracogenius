@@ -107,5 +107,5 @@ DGservice.factory('CardFetcher', (CachingHttp) => {
   return new CardFetcher(CachingHttp);
 });
 
-var DracoGenius = angular.module('DG', ['DG.service']);
+var DracoGenius = angular.module('DG', ['DG.service', 'scroll']);
 
