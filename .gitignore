@@ -2,3 +2,4 @@ app/src/*.js
 test/*.js
 *.sublime-workspace
 app/lib/jsparse.js
+app.zip
