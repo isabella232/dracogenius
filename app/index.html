@@ -38,6 +38,12 @@
     .singleCardTaggingPanel {
       font-style: bold;
     }
+    .floatingInfo {
+      position: absolute;
+      right: 30px;
+      top: 30px;
+      font-size: 150%;
+    }
   </style>
 </head>
 
@@ -52,10 +58,19 @@
           </a>
           <br>
           <input ng-model="tagCardTagString" autofocus="autofocus"
-                 ui-keypress="{'enter':'tagEntered($event)'}"
+                 ui-keypress="{'enter':'tagEntered($event, 1)', 'shift-enter': 'tagEntered($event, -1)'}"
                  class="tagEnterer"></input>
+          <br>
+          <div>
+            {{(tagCardIndex % cards.length) + 1}} / {{cards.length}}
+          </div>
         </div>
       </center>
+      <table class='floatingInfo'>
+        <tr ng-repeat="tagCount in tagHistogram">
+          <td>{{tagCount[0]}}</td><td>{{tagCount[1]}}</td>
+        </tr>
+      </table>
     </div>
     <div class="searchPanel" ng-show='false'>
       <input ng-model="search"></input>
