@@ -153,7 +153,7 @@ class RegexQuery implements QueryPart {
     this.regexp = new RegExp(regex, 'i');
   }
   match(card:Card) {
-    return this.regexp.test(card.rawHtml);
+    return this.regexp.test(card.rawHtml + " " + card.tags.join(", "));
   }
 }
 

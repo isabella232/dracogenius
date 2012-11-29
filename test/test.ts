@@ -1,3 +1,5 @@
+cardsByName['Acidic Slime'].tags = ['threat, answer'];
+
 describe("Query Parser", function() {
   var examples = [
     [
@@ -29,6 +31,12 @@ describe("Query Parser", function() {
       "ajani lifelink",
       ["Ajani's Sunstriker"],
       ["Ajani, Caller of the Pride", "Glorious Charge"]
+    ],
+    [
+      "regular text searches should also match tags",
+      "threat",
+      ["Acidic Slime"],
+      ["Ajani's Sunstriker"]
     ]
   ];
 
