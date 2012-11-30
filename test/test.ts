@@ -1,4 +1,4 @@
-cardsByName['Acidic Slime'].tags = ['threat, answer'];
+cardsByName['Acidic Slime'].tags = ['threat', 'answer'];
 
 describe("Query Parser", function() {
   var examples = [
@@ -34,9 +34,15 @@ describe("Query Parser", function() {
     ],
     [
       "regular text searches should also match tags",
-      "threat",
-      ["Acidic Slime"],
+      "answer",
+      ["Acidic Slime", "Index", "Unsummon"],
       ["Ajani's Sunstriker"]
+    ],
+    [
+      "tag searches shouldn't match cards with the query in their text",
+      "tag:answer",
+      ["Acidic Slime"],
+      ["Index", "Unsummon", "Ajani's Sunstriker"]
     ]
   ];
 

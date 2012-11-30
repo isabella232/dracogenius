@@ -103,11 +103,18 @@ class Query {
       function(ast) {return new TypeQuery(ast[1])}
     );
 
+    var tagSearch = withAction(
+      sequence([token("tag:"), search_token]),
+      function(ast) {return new TagQuery(ast[1])}
+    )
+
     var normalSearch = withAction(search_token, function(str) {
       return new RegexQuery(str);
     });
 
-    var singleSearchTerm = whitespace(choice([typeSearch, normalSearch]));
+    var singleSearchTerm = whitespace(choice([typeSearch,
+                                              tagSearch,
+                                              normalSearch]));
 
     var searchCombiner = withAction(repeat(singleSearchTerm),
       function (queries:QueryPart[]):QueryPart {
@@ -168,3 +175,19 @@ class TypeQuery implements QueryPart {
   }
 }
 
+class TagQuery implements QueryPart {
+  regexp : RegExp;
+  constructor(typeStr:string) {
+    this.regexp = new RegExp(typeStr, 'i');
+  };
+
+  match(card:Card) {
+    var result = false;
+    card.tags.forEach((tag:string) => {
+      if (this.regexp.test(tag)) {
+        result = true;
+      }
+    })
+    return result;
+  }
+}
