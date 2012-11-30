@@ -106,13 +106,19 @@ class Query {
     var tagSearch = withAction(
       sequence([token("tag:"), search_token]),
       function(ast) {return new TagQuery(ast[1])}
-    )
+    );
+
+    var artistSearch = withAction(
+      sequence([token("a:"), search_token]),
+      function(ast) {return new ArtistQuery(ast[1])}
+    );
 
     var normalSearch = withAction(search_token, function(str) {
       return new RegexQuery(str);
     });
 
-    var singleSearchTerm = whitespace(choice([typeSearch,
+    var singleSearchTerm = whitespace(choice([artistSearch,
+                                              typeSearch,
                                               tagSearch,
                                               normalSearch]));
 
@@ -188,6 +194,23 @@ class TagQuery implements QueryPart {
         result = true;
       }
     })
+    return result;
+  }
+}
+
+class ArtistQuery implements QueryPart {
+  regexp : RegExp;
+  constructor(typeStr:string) {
+    this.regexp = new RegExp(typeStr, 'i');
+  };
+
+  match(card:Card) {
+    var result = false;
+    card.printings.forEach((printing:CardPrinting) => {
+      if (this.regexp.test(printing.illustrator)) {
+        result = true;
+      }
+    });
     return result;
   }
 }

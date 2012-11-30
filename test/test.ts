@@ -43,6 +43,12 @@ describe("Query Parser", function() {
       "tag:answer",
       ["Acidic Slime"],
       ["Index", "Unsummon", "Ajani's Sunstriker"]
+    ],
+    [
+      "artis searches shouldn't match cards with the query in their test",
+      "a:kie",
+      ["Arctic Aven"],
+      ["Mogg Flunkies"]
     ]
   ];
 
@@ -97,6 +103,14 @@ describe("Card.parseCardHtml", function() {
           collectorsNumber: "181a",
           illustrator: "Eric Deschamps",
           rarity: "Mythic Rare"
+        }
+      }
+    ],
+    [
+      "Arctic Aven",
+      {
+        printings: {
+          illustrator: "Igor Kieryluk"
         }
       }
     ]
@@ -166,10 +180,3 @@ describe("Learning jsparse.js Tests", function() {
     //expect(searchCombiner(input).ast).toEqual([]);//new RegexQuery('lol'), new TypeQuery("abc def"), new RegexQuery('butts')])
     });
 });
-
-
-describe("Playing with regexing over the html", function() {
-  it("should match the casting cost", function() {
-    "<td valign=\"top\" width=\"25%\">\n        <span style=\"font-size: 1.2em;\"><a href=\"/rtr/en/210.html\">Azor's Elocutors</a></span>\n        <p><img src=\"http://magiccards.info/images/en.gif\" alt=\"English\" width=\"16\" height=\"11\" class=\"flag2\"> Return to Ravnica, <i>Rare</i></p>\n\n          <p>Creature — Human Advisor 3/5,\n            3{W/U}{W/U} (5)</p>\n          <p class=\"ctext\"><b>At the beginning of your upkeep, put a filibuster counter on Azor's Elocutors. Then if Azor's Elocutors has five or more filibuster counters on it, you win the game.<br><br>Whenever a source deals damage to you, remove a filibuster counter from Azor's Elocutors.</b></p>\n\n        <p><i></i></p>\n        <p>Illus. Johannes Voss</p>\n    </td>"
-  })
-})
