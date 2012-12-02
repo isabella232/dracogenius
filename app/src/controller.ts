@@ -44,9 +44,10 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
         var card = $scope.cards[$scope.tagCardIndex % $scope.cards.length];
         if (card.tags.length === 0) {
           $scope.tagCard = card;
-          break;
+          return;
         }
       }
+      $scope.tagCard = $scope.cards[0];
     }
   });
   $scope.$watch("tagCard", () => {
