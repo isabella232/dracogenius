@@ -123,7 +123,7 @@ class Query {
                                              normalSearch]));
 
     var negatedSearchTerm = withAction(
-      sequence([ch('-'), basicSearchTerm]),
+      sequence([token('-'), basicSearchTerm]),
       (ast) => Query.not(ast[1]));
 
     var searchTerm = choice([negatedSearchTerm, basicSearchTerm]);
@@ -144,28 +144,39 @@ class Query {
   }
 
   static and(queries:QueryPart[]):QueryPart {
-    return {
-      match: (card:Card) {
-        var matched = true;
-        queries.forEach((query) => {
-          matched = matched && query.match(card);
-        });
-        return matched;
-      }
-    }
+    return new AndQuery(queries);
   }
 
   static not(query:QueryPart):QueryPart {
-    return {
-      match: (card:Card) {
-        return !query.match(card)
-      }
-    }
+    return new NotQuery(query);
   }
 }
 
+
+
+
 interface QueryPart {
   match(card:Card):bool;
+}
+
+class AndQuery implements QueryPart {
+  constructor(public queries:QueryPart[]) {};
+
+  match(card:Card):bool {
+    var matched = true;
+    this.queries.forEach((query:QueryPart) => {
+      matched = matched && query.match(card);
+    });
+    return matched;
+  }
+}
+
+class NotQuery implements QueryPart {
+  constructor(public query:QueryPart) { }
+
+  match(card:Card):bool {
+    return !this.query.match(card);
+  }
 }
 
 class MatchAllQuery implements QueryPart {
