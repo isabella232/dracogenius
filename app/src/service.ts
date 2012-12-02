@@ -118,7 +118,9 @@ class CardFetcher {
     var tagsPromise = pOr(this.PermanantStorage.getFromStorage("tags"), {}, this.$q);
     return this.$q.all([htmlPromise, tagsPromise]).then((values) => {
         var html = values[0];
-        this.tags = values[1];
+        for (var name in values[1]) {
+          this.tags[name] = values[1][name];
+        }
         return html
           // split into cards
           .match(/<td valign="top" width="25%">[^]+?<\/td>/gm)
