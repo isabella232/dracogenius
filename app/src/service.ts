@@ -184,7 +184,7 @@ DGservice.factory('PermanantStorage', ($q, $rootScope) => {
   return new PermanantStorage($q, $rootScope);
 });
 //TODO(rictic): this doesn't seem to be working
-DGservice.filter("pretty", (obj) => JSON.stringify(obj, null, 2));
+DGservice.filter("pretty", () => (obj) => JSON.stringify(obj, null, 2));
 
 var DracoGenius = angular.module('DG', ['DG.service', 'scroll', 'ui']);
 

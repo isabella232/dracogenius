@@ -157,7 +157,8 @@
     </section>
 
     <section class="config" ng-show="mode == 'config'">
-      <textarea>{{tags}}</textarea>
+      <h4>Your tag data (copy this out for backup):</h4>
+      <textarea style='width:500px; height:300px;'>{{tags | pretty}}</textarea>
     </section>
 
   </div>
