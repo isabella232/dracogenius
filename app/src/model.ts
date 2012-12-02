@@ -117,12 +117,18 @@ class Query {
       return new RegexQuery(str);
     });
 
-    var singleSearchTerm = whitespace(choice([artistSearch,
-                                              typeSearch,
-                                              tagSearch,
-                                              normalSearch]));
+    var basicSearchTerm = whitespace(choice([artistSearch,
+                                             typeSearch,
+                                             tagSearch,
+                                             normalSearch]));
 
-    var searchCombiner = withAction(repeat(singleSearchTerm),
+    var negatedSearchTerm = withAction(
+      sequence([ch('-'), basicSearchTerm]),
+      (ast) => Query.not(ast[1]));
+
+    var searchTerm = choice([negatedSearchTerm, basicSearchTerm]);
+
+    var searchCombiner = withAction(repeat(searchTerm),
       function (queries:QueryPart[]):QueryPart {
         if (!queries) {
           return new MatchAllQuery();
@@ -145,6 +151,14 @@ class Query {
           matched = matched && query.match(card);
         });
         return matched;
+      }
+    }
+  }
+
+  static not(query:QueryPart):QueryPart {
+    return {
+      match: (card:Card) {
+        return !query.match(card)
       }
     }
   }

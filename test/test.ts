@@ -49,7 +49,20 @@ describe("Query Parser", function() {
       "a:kie",
       ["Arctic Aven"],
       ["Mogg Flunkies"]
-    ]
+    ],
+    [
+      "negate search should negate single tokens",
+      "-deathtouch",
+      ["Ajani's Sunstriker", "Disciple of Bolas"],
+      ["Acidic Slime", "Deadly Recluse"]
+    ],
+    [
+      "negate search should work with property searches",
+      "-t:creature",
+      ["Akroma's Memorial"],
+      ["Ajani's Sunstriker"]
+    ],
+
   ];
 
   beforeEach(function() {
