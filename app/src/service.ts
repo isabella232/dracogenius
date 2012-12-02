@@ -160,7 +160,11 @@ class CardFetcher {
 
   updatedMultipleTags(cards:Card[]) {
     cards.forEach((card:Card) {
-      this.tags[card.name] = card.tags;
+      if (card.tags.length === 0) {
+        delete this.tags[card.name];
+      } else {
+        this.tags[card.name] = card.tags;
+      }
     });
     this.PermanantStorage.setInStorage("tags", this.tags);
   }
