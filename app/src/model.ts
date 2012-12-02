@@ -89,7 +89,8 @@ class Card {
 }
 
 class Query {
-  static parse(search:string):QueryPart {
+  static parser : Parser;
+  static initializeParser() {
     var word = withJoin(repeat1(negate(choice([" ", "\t", "\n"].map(ch)))));
 
     var quoted = withAction(
@@ -140,7 +141,10 @@ class Query {
       }
     );
 
-    return searchCombiner(ps(search)).ast;
+    Query.parser = searchCombiner;
+  }
+  static parse(search:string):QueryPart {
+    return Query.parser(ps(search)).ast;
   }
 
   static and(queries:QueryPart[]):QueryPart {
@@ -152,7 +156,7 @@ class Query {
   }
 }
 
-
+Query.initializeParser();
 
 
 interface QueryPart {
