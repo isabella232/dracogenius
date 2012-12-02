@@ -1,11 +1,12 @@
 cardsByName['Acidic Slime'].tags = ['threat', 'answer'];
+var allCardNames = allCards.map(function(card){return card.name;});
 
 describe("Query Parser", function() {
-  var examples = [
+  var examples = <any[][]>[
     [
       "should match anything with an empty query",
       "",
-      allCards.map(function(card){return card.name;}),
+      allCardNames,
       []
     ],
     [
@@ -62,7 +63,18 @@ describe("Query Parser", function() {
       ["Akroma's Memorial"],
       ["Ajani's Sunstriker"]
     ],
-
+    [
+      "negate should work in the second token of a search",
+      "a -a",
+      [],
+      allCardNames
+    ],
+    [
+      "negate should work in for property searches",
+      "flying -t:instant",
+      [],
+      allCardNames
+    ],
   ];
 
   beforeEach(function() {
