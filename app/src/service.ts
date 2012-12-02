@@ -118,7 +118,9 @@ class CardFetcher {
     var tagsPromise = pOr(this.PermanantStorage.getFromStorage("tags"), {}, this.$q);
     return this.$q.all([htmlPromise, tagsPromise]).then((values) => {
         var html = values[0];
-        this.tags = values[1];
+        for (var name in values[1]) {
+          this.tags[name] = values[1][name];
+        }
         return html
           // split into cards
           .match(/<td valign="top" width="25%">[^]+?<\/td>/gm)
@@ -176,7 +178,9 @@ DGservice.factory('CardFetcher', (CachingHttp:CachingHttp, PermanantStorage:Perm
 });
 DGservice.factory('PermanantStorage', ($q, $rootScope) => {
   return new PermanantStorage($q, $rootScope);
-})
+});
+//TODO(rictic): this doesn't seem to be working
+DGservice.filter("pretty", (obj) => JSON.stringify(obj, null, 2));
 
 var DracoGenius = angular.module('DG', ['DG.service', 'scroll', 'ui']);
 

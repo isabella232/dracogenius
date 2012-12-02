@@ -4,6 +4,7 @@ declare module angular {
   export interface Module {
     factory(name:string, factImpl:Function);
     directive(name:string, impl:Function);
+    filter(name:string, impl:(val:any)=>string);
   }
 
   export interface $http {

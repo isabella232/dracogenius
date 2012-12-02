@@ -4,7 +4,8 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
   $scope.cards = [];
   $scope.search = "";
   $scope.limit = 20;
-  $scope.mode = 'search'
+  $scope.mode = 'search';
+  $scope.tags = CardFetcher.tags;
 
   function updateCardSubset() {
     $scope.limit = 20;
