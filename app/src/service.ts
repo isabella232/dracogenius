@@ -196,11 +196,5 @@ function isObjectEmpty(obj:Object) {
 }
 
 function pOr(p:angular.$q.promise, fallback:any, $q):angular.$q.promise {
-  var deferred = $q.defer();
-  p.then((value) => {
-    deferred.resolve(value);
-  }, () => {
-    deferred.resolve(fallback);
-  })
-  return deferred.promise;
+  return p.then((value) => value, () => fallback);
 }

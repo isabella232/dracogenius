@@ -117,16 +117,16 @@ class Query {
       return new RegexQuery(str);
     });
 
-    var basicSearchTerm = whitespace(choice([artistSearch,
-                                             typeSearch,
-                                             tagSearch,
-                                             normalSearch]));
+    var basicSearchTerm = choice([artistSearch,
+                                  typeSearch,
+                                  tagSearch,
+                                  normalSearch]);
 
     var negatedSearchTerm = withAction(
       sequence([token('-'), basicSearchTerm]),
       (ast) => Query.not(ast[1]));
 
-    var searchTerm = choice([negatedSearchTerm, basicSearchTerm]);
+    var searchTerm = whitespace(choice([negatedSearchTerm, basicSearchTerm]));
 
     var searchCombiner = withAction(repeat(searchTerm),
       function (queries:QueryPart[]):QueryPart {
@@ -160,6 +160,7 @@ interface QueryPart {
 }
 
 class AndQuery implements QueryPart {
+  kind = 'and';
   constructor(public queries:QueryPart[]) {};
 
   match(card:Card):bool {
@@ -172,6 +173,7 @@ class AndQuery implements QueryPart {
 }
 
 class NotQuery implements QueryPart {
+  kind = 'not';
   constructor(public query:QueryPart) { }
 
   match(card:Card):bool {
@@ -180,12 +182,14 @@ class NotQuery implements QueryPart {
 }
 
 class MatchAllQuery implements QueryPart {
+  kind = 'match everything';
   match(card:Card) {
     return true;
   }
 }
 
 class RegexQuery implements QueryPart {
+  kind = 'regex';
   regexp : RegExp;
   constructor(regex:string) {
     this.regexp = new RegExp(regex, 'i');
@@ -197,6 +201,7 @@ class RegexQuery implements QueryPart {
 
 class TypeQuery implements QueryPart {
   regexp : RegExp;
+  kind = 'type';
   constructor(typeStr:string) {
     this.regexp = new RegExp(typeStr, 'i');
   };
@@ -208,6 +213,7 @@ class TypeQuery implements QueryPart {
 
 class TagQuery implements QueryPart {
   regexp : RegExp;
+  kind = 'tag';
   constructor(typeStr:string) {
     this.regexp = new RegExp(typeStr, 'i');
   };
@@ -225,6 +231,7 @@ class TagQuery implements QueryPart {
 
 class ArtistQuery implements QueryPart {
   regexp : RegExp;
+  kind = 'artist';
   constructor(typeStr:string) {
     this.regexp = new RegExp(typeStr, 'i');
   };

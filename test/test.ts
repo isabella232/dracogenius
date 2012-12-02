@@ -72,8 +72,8 @@ describe("Query Parser", function() {
     [
       "negate should work in for property searches",
       "flying -t:instant",
-      [],
-      allCardNames
+      ["Ajani, Caller of the Pride", "Fog Bank"],
+      []
     ],
   ];
 
@@ -101,6 +101,31 @@ describe("Query Parser", function() {
       rejectables.forEach(function(rejectable) {
         expect(source).not.shouldMatch(rejectable);
       });
+    });
+  });
+
+  var queryExamples = [
+    [
+      "a b",
+      new AndQuery([new RegexQuery('a'), new RegexQuery('b')])
+    ],
+    [
+      "-a",
+      new NotQuery(new RegexQuery('a'))
+    ],
+    [
+      "-t:a",
+      new NotQuery(new TypeQuery('a'))
+    ],
+    [
+      'a -b',
+      new AndQuery([new RegexQuery('a'), new NotQuery(new RegexQuery('b'))])
+    ]
+  ];
+  queryExamples.forEach((ex) => {
+
+    it("should parse the query `" + ex[0] + "` correctly", () => {
+      expect(Query.parse(ex[0])).toEqual(ex[1]);
     });
   });
 });
