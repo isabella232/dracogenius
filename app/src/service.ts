@@ -152,8 +152,14 @@ class CardFetcher {
     return this.CachingHttp.getImage(url);
   }
 
-  setTags(card:Card, tags:string[]) {
-    this.tags[card.name] = tags;
+  updatedTags(card:Card) {
+    this.updatedMultipleTags([card]);
+  }
+
+  updatedMultipleTags(cards:Card[]) {
+    cards.forEach((card:Card) {
+      this.tags[card.name] = card.tags;
+    });
     this.PermanantStorage.setInStorage("tags", this.tags);
   }
 }

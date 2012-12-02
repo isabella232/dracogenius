@@ -70,7 +70,69 @@
       <button ng-click="mode = 'tag'">Tag</button>
     </header>
     <hr>
-    <div class="singleCardTaggingPanel" ng-show="mode == 'tag'">
+
+    <section class="searchPanel" ng-show="mode == 'search'">
+      <input ng-model="search"></input>
+      <div>
+        <strong>{{cards.length}}</strong> cards<span ng-show="search.length">
+          match your search</span>.
+      </div>
+      <div ng-show="search.length">
+        <hr>
+        Tag {{cards.length}} cards: <input ng-model="groupTag" ui-keypress="{'enter':'addGroupTag()'}"></inpu>
+        <button ng-click='addGroupTag()'>Add</button><button ng-click='removeGroupTag()'>Remove</button>
+      </div>
+
+
+      <hr>
+      <h4>Stats</h4>
+      <div class="facet">
+        <label>Converted Mana Cost:</label>
+        <table>
+          <tr ng-repeat="cmcCount in cmcHistogram">
+            <td>{{cmcCount[0]}}</td><td>{{cmcCount[1]}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="facet">
+        <label>Rarity:</label>
+        <table>
+          <tr ng-repeat="rarityCount in rarityHistogram">
+            <td>{{rarityCount[0]}}</td><td>{{rarityCount[1]}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class='facet'>
+        <label>Tags:</label>
+        <table>
+          <tr ng-repeat="tagCount in tagHistogram">
+            <td>{{tagCount[0]}}</td><td>{{tagCount[1]}}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="endStats"></div>
+
+      <h3>Cards</h3>
+      <div ng-repeat="card in cards.slice(0,limit)" class="card">
+        <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
+        <a href="{{card.link}}"><img class="cardArt" ng-src="{{card.image}}"></a>
+        <!-- <pre>{{card.toJson(card)}}</pre> -->
+
+  <!--       <div>
+          {{card.type}}
+
+          <span ng-show="card.castingCost"> {{card.castingCost}}</span>
+          <br>
+          <b>{{card.abilities.join("&lt;br>")}}</b>
+          <br>
+          <i>{{card.flavorText}}</i>
+          <hr>
+        </div> -->
+      </div>
+    </section>
+
+    <section class="singleCardTaggingPanel" ng-show="mode == 'tag'">
       <center>
         <div>
           <a href="{{tagCard.link}}" target="_blank">
@@ -91,50 +153,8 @@
           <td>{{tagCount[0]}}</td><td>{{tagCount[1]}}</td>
         </tr>
       </table>
-    </div>
-    <div class="searchPanel" ng-show="mode == 'search'">
-      <input ng-model="search"></input>
-      <div>
-        <strong>{{cards.length}}</strong> cards<span ng-show="search.length">
-          match your search</span>.
-      </div>
-      <hr>
-      <h4>Stats</h4>
-      <div class="facet">
-        <label>Converted Mana Cost:</label>
-        <table>
-          <tr ng-repeat="cmcCount in cmcHistogram">
-            <td>{{cmcCount[0]}}</td><td>{{cmcCount[1]}}</td>
-          </tr>
-        </table>
-      </div>
-      <div class="facet">
-        <label>Rarity:</label>
-        <table>
-          <tr ng-repeat="rarityCount in rarityHistogram">
-            <td>{{rarityCount[0]}}</td><td>{{rarityCount[1]}}</td>
-          </tr>
-        </table>
-      </div>
-      <div class="endStats"></div>
-      <h3>Cards</h3>
-      <div ng-repeat="card in cards.slice(0,limit)" class="card">
-        <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
-        <a href="{{card.link}}"><img class="cardArt" ng-src="{{card.image}}"></a>
-        <!-- <pre>{{card.toJson(card)}}</pre> -->
+    </section>
 
-  <!--       <div>
-          {{card.type}}
-
-          <span ng-show="card.castingCost"> {{card.castingCost}}</span>
-          <br>
-          <b>{{card.abilities.join("&lt;br>")}}</b>
-          <br>
-          <i>{{card.flavorText}}</i>
-          <hr>
-        </div> -->
-      </div>
-    </div>
   </div>
 
   <script src='lib/angular.js'></script>

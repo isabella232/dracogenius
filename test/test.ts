@@ -148,8 +148,8 @@ function objForEach(obj:Object, f:(key:string, val:any)=>void) {
   };
 }
 
-describe("Learning jsparse.js Tests", function() {
-  it("should parse t:any", function() {
+describe("Learning jsparse.js Tests", () => {
+  it("should parse t:any", () => {
     var word = withJoin(repeat1(negate(choice([" ", "\t", "\n"].map(ch)))));
 
     var quoted = withAction(
@@ -180,3 +180,20 @@ describe("Learning jsparse.js Tests", function() {
     //expect(searchCombiner(input).ast).toEqual([]);//new RegexQuery('lol'), new TypeQuery("abc def"), new RegexQuery('butts')])
     });
 });
+
+describe("Random Util Functions", () => {
+  it("arrayUnion should work", () => {
+    expect(arrayUnion([], [])).toEqual([]);
+    expect(arrayUnion(['a'], [])).toEqual(['a']);
+    expect(arrayUnion([], ['a'])).toEqual(['a']);
+    expect(arrayUnion(['a'], ['b'])).toEqual(['a', 'b']);
+    expect(arrayUnion(['a'], ['a'])).toEqual(['a']);
+  });
+  it("arrayDifference should work", () => {
+    expect(arrayDifference([], [])).toEqual([]);
+    expect(arrayDifference(['a'], [])).toEqual(['a']);
+    expect(arrayDifference([], ['a'])).toEqual([]);
+    expect(arrayDifference(['a'], ['b'])).toEqual(['a']);
+    expect(arrayDifference(['a'], ['a'])).toEqual([]);
+  })
+})

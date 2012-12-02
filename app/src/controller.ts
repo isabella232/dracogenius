@@ -1,5 +1,5 @@
 var fullCards = {};
-function CardSet(CardFetcher, $scope) {
+function CardSet(CardFetcher:CardFetcher, $scope) {
   $scope.fullCards = fullCards;
   $scope.cards = [];
   $scope.search = "";
@@ -16,6 +16,23 @@ function CardSet(CardFetcher, $scope) {
         $scope.cards.push(card);
       };
     }
+  }
+
+  $scope.addGroupTag = () => {
+    var tags = parseTags($scope.groupTag);
+    $scope.cards.forEach((card:Card) {
+      card.tags = arrayUnion(card.tags, tags);
+    });
+    CardFetcher.updatedMultipleTags($scope.cards);
+    makeHistograms($scope.cards);
+  }
+  $scope.removeGroupTag = () => {
+   var tags = parseTags($scope.groupTag);
+    $scope.cards.forEach((card:Card) {
+      card.tags = arrayDifference(card.tags, tags);
+    });
+    CardFetcher.updatedMultipleTags($scope.cards);
+    makeHistograms($scope.cards);
   }
 
   $scope.tagCardIndex = 0;
@@ -37,14 +54,16 @@ function CardSet(CardFetcher, $scope) {
     }
     $scope.tagCardTagString = $scope.tagCard.tags.join(", ");
   });
-  $scope.tagEntered = (event, delta) => {
-    var tags = $scope.tagCardTagString
-        .split(",")
+  function parseTags(tags:string):string[] {
+    return tags.split(",")
         .map((tag:string) => tag.trim())
         .filter((tag:string) => tag.length > 0);
-    console.log("tags:", tags);
+  }
+
+  $scope.tagEntered = (event, delta) => {
+    var tags = parseTags($scope.tagCardTagString);
     $scope.tagCard.tags = tags;
-    CardFetcher.setTags($scope.tagCard, tags);
+    CardFetcher.updatedTags($scope.tagCard);
 
     $scope.tagCardIndex += delta;
     if ($scope.tagCardIndex < 0) {
@@ -84,7 +103,7 @@ function CardSet(CardFetcher, $scope) {
           tagHistogram[tag] = 0;
         }
         tagHistogram[tag]++;
-      })
+      });
     });
     var cmcHistogramKeyValues = objectToKeyValues(cmcHistogram);
     cmcHistogramKeyValues.sort((a, b) => {
@@ -170,4 +189,12 @@ function randomPick(arr:any[]):any {
     return undefined;
   }
   return arr[Math.round(Math.random() * (arr.length - 1))];
+}
+
+function arrayUnion(arr1:any[], arr2:any[]):any[] {
+  return arr1.concat(arr2.filter((val) => arr1.indexOf(val) === -1));
+}
+
+function arrayDifference(arr1:any[], arr2:any[]):any[] {
+  return arr1.filter((val) => arr2.indexOf(val) === -1);
 }

@@ -10,8 +10,10 @@ basePath = './';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
+  'app/lib/angular.js',
+  'app/lib/angular-ui.js',
   'app/lib/jsparse.js',
-  'app/src/model.js',
+  'app/src/*.js',
   'test/*.js'
 ];
 
