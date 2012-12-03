@@ -75,6 +75,42 @@ describe("Query Parser", function() {
       ["Ajani, Caller of the Pride", "Fog Bank"],
       []
     ],
+    [
+      "converted mana cost equals search",
+      "cmc=5",
+      ["Acidic Slime"],
+      ["Ajani's Sunstriker", "Akroma's Memorial"]
+    ],
+    [
+      "converted mana cost greater-than search",
+      "cmc>5",
+      ["Akroma's Memorial"],
+      ["Ajani's Sunstriker", "Acidic Slime"]
+    ],
+    [
+      "converted mana cost greater-than search",
+      "cmc<5",
+      ["Ajani's Sunstriker",],
+      ["Akroma's Memorial", "Acidic Slime"]
+    ],
+    [
+      "converted mana cost greater-than search",
+      "cmc<=5",
+      ["Ajani's Sunstriker", "Acidic Slime"],
+      ["Akroma's Memorial"]
+    ],
+    [
+      "converted mana cost greater-than-or-equals search",
+      "cmc>=5",
+      ["Akroma's Memorial", "Acidic Slime"],
+      ["Ajani's Sunstriker"]
+    ],
+    [
+      "converted mana cost colon search",
+      "cmc:5",
+      ["Akroma's Memorial", "Acidic Slime"],
+      ["Ajani's Sunstriker"]
+    ],
   ];
 
   beforeEach(function() {

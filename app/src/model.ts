@@ -114,6 +114,13 @@ class Query {
       function(ast) {return new ArtistQuery(ast[1])}
     );
 
+    var cmcSearch = withAction(
+      sequence([token("cmc"),
+                choice(['=', '>=', '<=', ':', '>', '<'].map(token)),
+                search_token]),
+      (ast) => new CMCQuery(parseInt(ast[2], 10), ast[1])
+    );
+
     var normalSearch = withAction(search_token, function(str) {
       return new RegexQuery(str);
     });
@@ -121,6 +128,7 @@ class Query {
     var basicSearchTerm = choice([artistSearch,
                                   typeSearch,
                                   tagSearch,
+                                  cmcSearch,
                                   normalSearch]);
 
     var negatedSearchTerm = withAction(
@@ -248,6 +256,27 @@ class ArtistQuery implements QueryPart {
       }
     });
     return result;
+  }
+}
+
+class CMCQuery implements QueryPart {
+  kind = 'CMC';
+  constructor(public value:number, public operator:string) {}
+
+  match(card:Card) {
+    if (this.operator === '=') {
+      return card.cmc === this.value;
+    } else if ((this.operator === '>=') || (this.operator === ':')) {
+      return card.cmc >= this.value;
+    } else if (this.operator === '>') {
+      return card.cmc > this.value;
+    } else if (this.operator === '<') {
+      return card.cmc < this.value;
+    } else if (this.operator === '<=') {
+      return card.cmc <= this.value;
+    } else {
+      throw Error("unknown cmc operator '" + this.operator + "'");
+    }
   }
 }
 
