@@ -123,6 +123,10 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
     updateCardSubset();
   };
 
+  $scope.$watch('viewStyle', () => {
+    console.log($scope.viewStyle);
+  });
+
   var activeSets = ["m13", "isd", "rtr", "avr", "dka"];
   activeSets.forEach(function(set:string) {
     CardFetcher.getCards(set).then((cards) => {
@@ -149,18 +153,3 @@ angular.module('scroll', []).directive('whenScrolled', function() {
     };
   };
 });
-
-function randomPick(arr:any[]):any {
-  if (arr.length === 0) {
-    return undefined;
-  }
-  return arr[Math.round(Math.random() * (arr.length - 1))];
-}
-
-function arrayUnion(arr1:any[], arr2:any[]):any[] {
-  return arr1.concat(arr2.filter((val) => arr1.indexOf(val) === -1));
-}
-
-function arrayDifference(arr1:any[], arr2:any[]):any[] {
-  return arr1.filter((val) => arr2.indexOf(val) === -1);
-}

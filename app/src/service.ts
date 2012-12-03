@@ -115,7 +115,8 @@ class CardFetcher {
     var url = "http://magiccards.info/query?q=e%3A" + set + "%2Fen&v=spoiler";
 
     var htmlPromise = this.CachingHttp.get(url);
-    var tagsPromise = pOr(this.PermanantStorage.getFromStorage("tags"), {}, this.$q);
+    var tagsPromise = this.PermanantStorage.getFromStorage("tags")
+        .then((val)=>val, () => {return {};});
     return this.$q.all([htmlPromise, tagsPromise]).then((values) => {
         var html = values[0];
         for (var name in values[1]) {
@@ -188,13 +189,3 @@ DGservice.filter("pretty", () => (obj) => JSON.stringify(obj, null, 2));
 
 var DracoGenius = angular.module('DG', ['DG.service', 'scroll', 'ui']);
 
-function isObjectEmpty(obj:Object) {
-  for (var key in obj) {
-    return false;
-  }
-  return true;
-}
-
-function pOr(p:angular.$q.promise, fallback:any, $q):angular.$q.promise {
-  return p.then((value) => value, () => fallback);
-}

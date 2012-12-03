@@ -145,13 +145,21 @@ class Query {
       function(ast) {return new FlavorQuery(ast[1])}
     );
 
-
     var cmcSearch = withAction(
       sequence([token("cmc"),
                 choice(['=', '>=', '<=', ':', '>', '<'].map(token)),
                 search_token]),
       (ast) => new CMCQuery(parseInt(ast[2], 10), ast[1])
     );
+
+    var colorSearch = withAction(
+      sequence([token("c"),
+                choice([':', '!'].map(token)),
+                search_token]),
+      (ast) => new ColorQuery(ast[2], ast[1])
+    );
+
+
 
     var normalSearch = withAction(search_token, function(str) {
       return new RegexQuery(str);
@@ -162,6 +170,7 @@ class Query {
                                   typeSearch,
                                   tagSearch,
                                   cmcSearch,
+                                  colorSearch,
                                   normalSearch]);
 
     var negatedSearchTerm = withAction(
@@ -271,6 +280,26 @@ class TagQuery implements QueryPart {
       }
     })
     return result;
+  }
+}
+
+class ColorQuery implements QueryPart {
+  colors : string[];
+  kind = 'color';
+  constructor(colorString:string, public operator:string) {
+    this.colors = arrayUnique(colorString.toUpperCase().split(''));
+  }
+
+  match(card:Card) {
+    if (arrayIntersection(this.colors, card.colors).length === 0) {
+      return false;
+    }
+    if (this.operator === '!') {
+      if (arrayDifference(card.colors, this.colors).length > 0) {
+        return false;
+      }
+    }
+    return true;
   }
 }
 
@@ -389,8 +418,6 @@ class ColorFacet extends Facet {
     if (colors.length > 1) {
       return colors.concat(['multi']);
     } if (colors.length === 0 && !/Land/.test(card.type)) {
-      console.log(card.name);
-
       return ['colorless'];
     }
     return colors;

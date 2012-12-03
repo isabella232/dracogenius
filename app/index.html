@@ -62,7 +62,8 @@
 
 <body>
 
-  <div class="cardSet" ng-controller="CardSet" when-scrolled='onScrolledToBottom()'>
+  <div class="cardSet" ng-controller="CardSet"
+       when-scrolled='onScrolledToBottom()'>
 
     <header>
       <h2>DracoGenius</h2>
@@ -80,8 +81,11 @@
       </div>
       <div ng-show="search.length">
         <hr>
-        Tag {{cards.length}} cards: <input ng-model="groupTag" ui-keypress="{'enter':'addGroupTag()'}"></inpu>
-        <button ng-click='addGroupTag()'>Add</button><button ng-click='removeGroupTag()'>Remove</button>
+        Tag {{cards.length}} cards:
+        <input ng-model="groupTag" ui-keypress="{'enter':'addGroupTag()'}">
+        </input>
+        <button ng-click='addGroupTag()'>Add</button>
+        <button ng-click='removeGroupTag()'>Remove</button>
       </div>
 
 
@@ -92,6 +96,14 @@
         <table>
           <tr ng-repeat="cmcCount in cmcHistogram">
             <td>{{cmcCount[0]}}</td><td>{{cmcCount[1]}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class='facet'>
+        <label>Color:</label>
+        <table>
+          <tr ng-repeat="colorCount in colorHistogram">
+            <td>{{colorCount[0]}}</td><td>{{colorCount[1]}}</td>
           </tr>
         </table>
       </div>
@@ -111,17 +123,13 @@
           </tr>
         </table>
       </div>
-      <div class='facet'>
-        <label>Color:</label>
-        <table>
-          <tr ng-repeat="colorCount in colorHistogram">
-            <td>{{colorCount[0]}}</td><td>{{colorCount[1]}}</td>
-          </tr>
-        </table>
-      </div>
 
       <div class="endStats"></div>
 
+      <!-- <select ng-model='viewStyle' style='float:right;'>
+        <option value="cardImage">Card Images</option>
+        <option value="shortText">One Line Text</option>
+      </select> -->
       <h3>Cards</h3>
       <div ng-repeat="card in cards.slice(0,limit)" class="card">
         <!-- <h4><a href="{{card.link}}">{{card.name}}</a></h4> -->
@@ -177,5 +185,6 @@
   <script src="src/service.js"></script>
   <script src="src/model.js"></script>
   <script src="src/controller.js"></script>
+  <script src="src/utils.js"></script>
 </body>
 </html>

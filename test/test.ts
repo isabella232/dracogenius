@@ -122,7 +122,26 @@ describe("Query Parser", function() {
       'ft:"in his name"',
       ["Ajani's Sunstriker"],
       []
-    ]
+    ],
+    [
+      "basic single color search should work",
+      "c:b",
+      ["Cower in Fear", "Nicol Bolas, Planeswalker"],
+      ["Ajani's Sunstriker", "Akroma's Memorial", "Acidic Slime", "Arctic Aven"]
+    ],
+    [
+      "basic multi color search should work",
+      "c:bu",
+      ["Cower in Fear", "Nicol Bolas, Planeswalker", "Arctic Aven"],
+      ["Ajani's Sunstriker", "Akroma's Memorial", "Acidic Slime"]
+    ],
+    [
+      "exclusionary color search should work",
+      "c!B",
+      ["Cower in Fear"],
+      ["Ajani's Sunstriker", "Akroma's Memorial", "Acidic Slime", "Arctic Aven",
+       "Nicol Bolas, Planeswalker"]
+    ],
   ];
 
   beforeEach(function() {
@@ -133,7 +152,9 @@ describe("Query Parser", function() {
           return ("Search `" + this.actual +
                   "` should" + (this.isNot ? "n't" : "") + " match the card `" + cardName + "`");
         }
-        return query.match(cardsByName[cardName]);
+        var card = cardsByName[cardName];
+        expect(card && card.name).toEqual(cardName)
+        return query.match(card);
       }
     });
   });
@@ -303,5 +324,12 @@ describe("Random Util Functions", () => {
     expect(arrayDifference([], ['a'])).toEqual([]);
     expect(arrayDifference(['a'], ['b'])).toEqual(['a']);
     expect(arrayDifference(['a'], ['a'])).toEqual([]);
+  });
+  it("arrayIntersection should work", () => {
+    expect(arrayIntersection([], [])).toEqual([]);
+    expect(arrayIntersection(['a'], [])).toEqual([]);
+    expect(arrayIntersection([], ['a'])).toEqual([]);
+    expect(arrayIntersection(['a'], ['b'])).toEqual([]);
+    expect(arrayIntersection(['a'], ['a'])).toEqual(['a']);
   })
 })
