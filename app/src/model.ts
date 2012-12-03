@@ -140,6 +140,12 @@ class Query {
       function(ast) {return new ArtistQuery(ast[1])}
     );
 
+    var flavorSearch = withAction(
+      sequence([token("ft:"), search_token]),
+      function(ast) {return new FlavorQuery(ast[1])}
+    );
+
+
     var cmcSearch = withAction(
       sequence([token("cmc"),
                 choice(['=', '>=', '<=', ':', '>', '<'].map(token)),
@@ -152,6 +158,7 @@ class Query {
     });
 
     var basicSearchTerm = choice([artistSearch,
+                                  flavorSearch,
                                   typeSearch,
                                   tagSearch,
                                   cmcSearch,
@@ -278,6 +285,24 @@ class ArtistQuery implements QueryPart {
     var result = false;
     card.printings.forEach((printing:CardPrinting) => {
       if (this.regexp.test(printing.illustrator)) {
+        result = true;
+      }
+    });
+    return result;
+  }
+}
+
+class FlavorQuery implements QueryPart {
+  regexp : RegExp;
+  kind = 'flavor';
+  constructor(typeStr:string) {
+    this.regexp = new RegExp(typeStr, 'i');
+  };
+
+  match(card:Card) {
+    var result = false;
+    card.printings.forEach((printing:CardPrinting) => {
+      if (this.regexp.test(printing.flavorText)) {
         result = true;
       }
     });

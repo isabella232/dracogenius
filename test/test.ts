@@ -36,7 +36,7 @@ describe("Query Parser", function() {
     [
       "regular text searches should also match tags",
       "answer",
-      ["Acidic Slime", "Index", "Unsummon"],
+      ["Acidic Slime"],
       ["Ajani's Sunstriker"]
     ],
     [
@@ -115,7 +115,13 @@ describe("Query Parser", function() {
       "searches shouldn't match on flavor text by default",
       '"in his name"',
       [],
-      allCardNames
+      ["Ajani's Sunstriker"]
+    ],
+    [
+      "flavor text searching should work",
+      'ft:"in his name"',
+      ["Ajani's Sunstriker"],
+      []
     ]
   ];
 
