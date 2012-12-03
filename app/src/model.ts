@@ -34,6 +34,10 @@ class Card {
   }
 
   get colors() {
+    // Note: currently missing Color Indicators. Blargh.
+    if (!this.castingCost) {
+      return [];
+    }
     return ['W','U','B','R','G'].filter((color:string) {
       return this.castingCost.match(color);
     });
@@ -335,5 +339,19 @@ class RarityFacet extends Facet {
 class TagFacet extends Facet {
   getField(card:Card):string[] {
     return card.tags;
+  }
+}
+
+class ColorFacet extends Facet {
+  getField(card:Card):string[] {
+    var colors = card.colors;
+    if (colors.length > 1) {
+      return colors.concat(['multi']);
+    } if (colors.length === 0 && !/Land/.test(card.type)) {
+      console.log(card.name);
+
+      return ['colorless'];
+    }
+    return colors;
   }
 }

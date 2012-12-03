@@ -111,6 +111,14 @@
           </tr>
         </table>
       </div>
+      <div class='facet'>
+        <label>Color:</label>
+        <table>
+          <tr ng-repeat="colorCount in colorHistogram">
+            <td>{{colorCount[0]}}</td><td>{{colorCount[1]}}</td>
+          </tr>
+        </table>
+      </div>
 
       <div class="endStats"></div>
 

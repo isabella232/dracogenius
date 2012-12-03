@@ -88,6 +88,7 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
     $scope.cmcHistogram = new CMCFacet().getHistogram(cards);
     $scope.rarityHistogram = new RarityFacet().getHistogram(cards);
     $scope.tagHistogram = new TagFacet().getHistogram(cards);
+    $scope.colorHistogram = new ColorFacet().getHistogram(cards);
   }
 
   $scope.$watch("cards", () => {
