@@ -250,3 +250,55 @@ class ArtistQuery implements QueryPart {
     return result;
   }
 }
+
+class Facet {
+  getHistogram(cards:Card[]):any[][] {
+    var map = {};
+    cards.forEach((card:Card) => {
+      this.getField(card).forEach((value) => {
+        if (!(value in map)) {
+          map[value] = 0;
+        }
+        map[value]++;
+      });
+    });
+    var keyValues = objectToKeyValues(map);
+    keyValues.sort((a,b) => {
+      return this.sortBy(a[0], a[1]) - this.sortBy(b[0], b[1]);
+    });
+    return keyValues;
+  }
+
+  getField(card:Card):string[] {
+    throw Error("Not implemented");
+  };
+  sortBy(value:string, count:number):number {
+    return -count;
+  };
+
+}
+
+class CMCFacet extends Facet {
+  getField(card:Card):string[] {
+    return ["" + (card.cmc || 0)];
+  }
+  sortBy(cmc:string, count:number) {
+    return parseInt(cmc, 10) || -1;
+  }
+}
+
+class RarityFacet extends Facet {
+  rarities = ["Land", "Common", "Uncommon", "Rare", "Mythic Rare"];
+  getField(card:Card):string[] {
+    return card.printings.map((printing:CardPrinting) => printing.rarity);
+  }
+  sortBy(rarity:string, count:number) {
+    return this.rarities.indexOf(rarity);
+  }
+}
+
+class TagFacet extends Facet {
+  getField(card:Card):string[] {
+    return card.tags;
+  }
+}

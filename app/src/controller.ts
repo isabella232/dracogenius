@@ -85,46 +85,9 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
   $scope.$watch("fullCards", updateCardSubset);
 
   function makeHistograms(cards) {
-    var cmcHistogram = {};
-    var rarityHistogram = {};
-    var tagHistogram = {};
-
-    cards.forEach((card:Card) => {
-      if (!(("" + card.cmc) in cmcHistogram)) {
-        cmcHistogram[card.cmc] = 0;
-      }
-      cmcHistogram[card.cmc] +=1;
-      card.printings.forEach((printing:CardPrinting) {
-        if (!(printing.rarity in rarityHistogram)) {
-          rarityHistogram[printing.rarity] = 0;
-        }
-        rarityHistogram[printing.rarity] +=1;
-      });
-      card.tags.forEach((tag:string) {
-        if (!(tag in tagHistogram)) {
-          tagHistogram[tag] = 0;
-        }
-        tagHistogram[tag]++;
-      });
-    });
-    var cmcHistogramKeyValues = objectToKeyValues(cmcHistogram);
-    cmcHistogramKeyValues.sort((a, b) => {
-      var aV = parseInt(a[0], 10) || -1;
-      var bV = parseInt(b[0], 10) || -1;
-      return aV - bV;
-    });
-    var rarityHistogramKeyValues = objectToKeyValues(rarityHistogram);
-    rarityHistogramKeyValues.sort((a, b) => {
-      var rarities = ["Land", "Common", "Uncommon", "Rare", "Mythic Rare"]
-      var aV = rarities.indexOf(a[0]);
-      var bV = rarities.indexOf(b[0]);
-      return aV - bV;
-    });
-
-    $scope.cmcHistogram = cmcHistogramKeyValues;
-    $scope.rarityHistogram = rarityHistogramKeyValues;
-    $scope.tagHistogram = objectToKeyValues(tagHistogram)
-                              .sort((a, b) => b[1] - a[1]);;
+    $scope.cmcHistogram = new CMCFacet().getHistogram(cards);
+    $scope.rarityHistogram = new RarityFacet().getHistogram(cards);
+    $scope.tagHistogram = new TagFacet().getHistogram(cards);
   }
 
   $scope.$watch("cards", () => {
