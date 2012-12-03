@@ -50,6 +50,22 @@ class Card {
     return JSON.stringify(obj, null, 2);
   }
 
+  toString() {
+    return [
+      this.name,
+      this.abilities.join("\n"),
+      this.castingCost,
+      this.type,
+      this.tags.join(" "),
+      this.printings.map((printing:CardPrinting):string => {
+        return [
+          printing.edition,
+          printing.rarity
+        ].join("\n");
+      }).join("\n")
+    ].join("\n");
+  }
+
   static parseCardHtml(cardHtml:string, CardFetcher:CardFetcher):Card {
     var r = /<span style="font-size: 1.2em;"><a href="\/(.*?)\/en\/(\d+[ab]?)\.html">(.*?)<\/a><\/span>/;
     var match = cardHtml.match(r);
@@ -217,7 +233,7 @@ class RegexQuery implements QueryPart {
     this.regexp = new RegExp(regex, 'i');
   }
   match(card:Card) {
-    return this.regexp.test(card.rawHtml + " " + card.tags.join(", "));
+    return this.regexp.test(card.toString());
   }
 }
 

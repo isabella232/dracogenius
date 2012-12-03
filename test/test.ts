@@ -111,6 +111,12 @@ describe("Query Parser", function() {
       ["Akroma's Memorial", "Acidic Slime"],
       ["Ajani's Sunstriker"]
     ],
+    [
+      "searches shouldn't match on flavor text by default",
+      '"in his name"',
+      [],
+      allCardNames
+    ]
   ];
 
   beforeEach(function() {
