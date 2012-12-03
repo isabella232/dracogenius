@@ -17,6 +17,14 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
         $scope.cards.push(card);
       };
     }
+    $scope.cards.sort((a:Card,b:Card) => {
+      if (a.name === b.name) {
+        return 0
+      } else if(a.name < b.name) {
+        return -1
+      }
+      return 1;
+    });
   }
 
   $scope.addGroupTag = () => {
@@ -127,7 +135,7 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
     console.log($scope.viewStyle);
   });
 
-  var activeSets = ["m13", "isd", "rtr", "avr", "dka"];
+  var activeSets = [sets["Core Set Editions"][0]].concat(sets["Innistrad Cycle"]).concat(sets["Return to Ravnica"]).map((arr) => arr[0]);
   activeSets.forEach(function(set:string) {
     CardFetcher.getCards(set).then((cards) => {
       $scope.addCards(cards);

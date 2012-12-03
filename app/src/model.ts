@@ -423,3 +423,237 @@ class ColorFacet extends Facet {
     return colors;
   }
 }
+
+
+var sets = {
+  "Return to Ravnica": [
+        ["rtr", "Return to Ravnica"],
+  ],
+  "Innistrad Cycle": [
+        ["avr", "Avacyn Restored"],
+        ["dka", "Dark Ascension"],
+        ["isd", "Innistrad"],
+  ],
+  "Scars of Mirrodin": [
+        ["nph", "New Phyrexia"],
+        ["mbs", "Mirrodin Besieged"],
+        ["som", "Scars of Mirrodin"],
+  ],
+  "Zendikar Cycle": [
+        ["roe", "Rise of the Eldrazi"],
+        ["wwk", "Worldwake"],
+        ["zen", "Zendikar"],
+  ],
+  "Shards of Alara": [
+        ["arb", "Alara Reborn"],
+        ["cfx", "Conflux"],
+        ["ala", "Shards of Alara"],
+  ],
+  "Shadowmoor Cycle": [
+        ["eve", "Eventide"],
+        ["shm", "Shadowmoor"],
+  ],
+  "Lorwyn Cycle": [
+        ["mt", "Morningtide"],
+        ["lw", "Lorwyn"],
+  ],
+  "Time Spiral Cycle": [
+        ["fut", "Future Sight"],
+        ["pc", "Planar Chaos"],
+        ["ts", "Time Spiral"],
+        ["tsts", "Time Spiral \"Timeshifted\""],
+  ],
+  "Ice Age Cycle": [
+        ["cs", "Coldsnap"],
+        ["ai", "Alliances"],
+        ["ia", "Ice Age"],
+  ],
+  "Ravnica Cycle": [
+        ["di", "Dissension"],
+        ["gp", "Guildpact"],
+        ["rav", "Ravnica: City of Guilds"],
+  ],
+  "Kamigawa Cycle": [
+        ["sok", "Saviors of Kamigawa"],
+        ["bok", "Betrayers of Kamigawa"],
+        ["chk", "Champions of Kamigawa"],
+  ],
+  "Mirrodin Cycle": [
+        ["5dn", "Fifth Dawn"],
+        ["ds", "Darksteel"],
+        ["mi", "Mirrodin"],
+  ],
+  "Onslaught Cycle": [
+        ["sc", "Scourge"],
+        ["le", "Legions"],
+        ["on", "Onslaught"],
+  ],
+  "Odyssey Cycle": [
+        ["ju", "Judgment"],
+        ["tr", "Torment"],
+        ["od", "Odyssey"],
+  ],
+  "Invasion Cycle": [
+        ["ap", "Apocalypse"],
+        ["ps", "Planeshift"],
+        ["in", "Invasion"],
+  ],
+  "Masquerade Cycle": [
+        ["pr", "Prophecy"],
+        ["ne", "Nemesis"],
+        ["mm", "Mercadian Masques"],
+  ],
+  "Artifacts Cycle": [
+        ["ud", "Urza's Destiny"],
+        ["ul", "Urza's Legacy"],
+        ["us", "Urza's Saga"],
+  ],
+  "Rath Cycle": [
+        ["ex", "Exodus"],
+        ["sh", "Stronghold"],
+        ["tp", "Tempest"],
+  ],
+  "Mirage Cycle": [
+        ["wl", "Weatherlight"],
+        ["vi", "Visions"],
+        ["mr", "Mirage"],
+  ],
+  "Early Sets": [
+        ["hl", "Homelands"],
+        ["fe", "Fallen Empires"],
+        ["dk", "The Dark"],
+        ["lg", "Legends"],
+        ["aq", "Antiquities"],
+        ["an", "Arabian Nights"],
+  ],
+  "Core Set Editions": [
+        ["m13", "Magic 2013"],
+        ["m12", "Magic 2012"],
+        ["m11", "Magic 2011"],
+        ["m10", "Magic 2010"],
+        ["10e", "Tenth Edition"],
+        ["9e", "Ninth Edition"],
+        ["8e", "Eighth Edition"],
+        ["7e", "Seventh Edition"],
+        ["6e", "Classic Sixth Edition"],
+        ["5e", "Fifth Edition"],
+        ["4e", "Fourth Edition"],
+        ["rv", "Revised Edition"],
+        ["un", "Unlimited Edition"],
+        ["be", "Limited Edition Beta"],
+        ["al", "Limited Edition Alpha"],
+  ],
+  "Magic Online": [
+        ["me4", "MTGO Masters Edition IV"],
+        ["me3", "MTGO Masters Edition III"],
+        ["me2", "MTGO Masters Edition II"],
+        ["med", "MTGO Masters Edition"],
+  ],
+  "Premium Deck Series": [
+        ["pd3", "Premium Deck Series: Graveborn"],
+        ["pd2", "Premium Deck Series: Fire and Lightning"],
+        ["pds", "Premium Deck Series: Slivers"],
+  ],
+  "Reprint Sets": [
+        ["dpa", "Duels of the Planeswalkers"],
+        ["ch", "Chronicles"],
+  ],
+  "“Command Zone” Series": [
+        ["cma", "Commander's Arsenal"],
+        ["pc2", "Planechase 2012 Edition"],
+        ["cmd", "Commander"],
+        ["arc", "Archenemy"],
+        ["pch", "Planechase"],
+  ],
+  "From The Vault": [
+        ["v12", "From the Vault: Realms"],
+        ["fvl", "From the Vault: Legends"],
+        ["fvr", "From the Vault: Relics"],
+        ["fve", "From the Vault: Exiled"],
+        ["fvd", "From the Vault: Dragons"],
+  ],
+  "Duel Decks": [
+        ["ddj", "Duel Decks: Izzet vs. Golgari"],
+        ["ddi", "Duel Decks: Venser vs. Koth"],
+        ["ddh", "Duel Decks: Ajani vs. Nicol Bolas"],
+        ["ddg", "Duel Decks: Knights vs. Dragons"],
+        ["ddf", "Duel Decks: Elspeth vs. Tezzeret"],
+        ["pvc", "Duel Decks: Phyrexia vs. The Coalition"],
+        ["gvl", "Duel Decks: Garruk vs. Liliana"],
+        ["dvd", "Duel Decks: Divine vs. Demonic"],
+        ["jvc", "Duel Decks: Jace vs. Chandra"],
+        ["evg", "Duel Decks: Elves vs. Goblins"],
+  ],
+  "Theme Decks": [
+        ["cstd", "Coldsnap Theme Decks"],
+  ],
+  "Independent Box Sets": [
+        ["9eb", "Ninth Edition Box Set"],
+        ["8eb", "Eighth Edition Box Set"],
+        ["dm", "Deckmasters"],
+        ["bd", "Beatdown Box Set"],
+        ["br", "Battle Royale Box Set"],
+        ["at", "Anthologies"],
+        ["mgbc", "Multiverse Gift Box Cards"],
+  ],
+  "Un-Serious Sets": [
+        ["uh", "Unhinged"],
+        ["ug", "Unglued"],
+  ],
+  "Alternate Art": [
+        ["uhaa", "Unhinged Alternate Foils"],
+  ],
+  "Beginner Sets": [
+        ["st2k", "Starter 2000"],
+        ["st", "Starter 1999"],
+        ["p3k", "Portal Three Kingdoms"],
+        ["po2", "Portal Second Age"],
+        ["po", "Portal"],
+        ["itp", "Introductory Two-Player Set"],
+  ],
+  "Not Legal for Tournament Play": [
+        ["ced", "Collector's Edition"],
+        ["cedi", "International Collectors' Edition"],
+  ],
+  "Event Incentives": [
+        ["15ann", "15th Anniversary"],
+        ["gpx", "Grand Prix"],
+        ["pro", "Pro Tour"],
+        ["mgdc", "Magic Game Day Cards"],
+        ["wrl", "Worlds"],
+        ["drc", "Dragon Con"],
+  ],
+  "Tournament Rewards": [
+        ["ptc", "Prerelease Events"],
+        ["rep", "Release Events"],
+        ["mlp", "Magic: The Gathering Launch Parties"],
+        ["sum", "Summer of Magic"],
+        ["grc", "WPN/Gateway"],
+        ["cp", "Champs"],
+        ["thgt", "Two-Headed Giant Tournament"],
+        ["arena", "Arena League"],
+        ["fnmp", "Friday Night Magic"],
+        ["mprp", "Magic Player Rewards"],
+        ["sus", "Super Series"],
+  ],
+  "Gifts": [
+        ["hho", "Happy Holidays"],
+        ["jr", "Judge Gift Program"],
+        ["pot", "Portal Demogame"],
+  ],
+  "Redemption Rewards": [
+        ["euro", "European Land Program"],
+        ["guru", "Guru"],
+        ["apac", "Asia Pacific Land Program"],
+        ["wotc", "WotC Online Store"],
+  ],
+  "Celebration Cards": [
+        ["uqc", "Celebration Cards"],
+  ],
+  "Media Inserts": [
+        ["mbp", "Media Inserts"],
+  ],
+  "Membership Incentives": [
+        ["dcilm", "Legend Membership"],
+  ],
+}
