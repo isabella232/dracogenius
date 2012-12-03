@@ -172,7 +172,8 @@ describe("Card.parseCardHtml", function() {
        "Azor's Elocutors",
        {
          castingCost: "3{W/U}{W/U}",
-         cmc: 5
+         cmc: 5,
+         colors: ["W", "U"]
        }
     ],
     [
@@ -180,6 +181,7 @@ describe("Card.parseCardHtml", function() {
       {
         castingCost: "2GG",
         cmc: 4,
+        colors: ["G"]
       }
     ],
     [
@@ -189,7 +191,8 @@ describe("Card.parseCardHtml", function() {
           collectorsNumber: "181a",
           illustrator: "Eric Deschamps",
           rarity: "Mythic Rare"
-        }
+        },
+        colors: ["G"]
       }
     ],
     [
@@ -197,7 +200,14 @@ describe("Card.parseCardHtml", function() {
       {
         printings: {
           illustrator: "Igor Kieryluk"
-        }
+        },
+        colors: ["U"]
+      }
+    ],
+    [
+      "Akroma's Memorial",
+      {
+        colors: []
       }
     ]
   ]

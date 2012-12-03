@@ -33,6 +33,12 @@ class Card {
     return "http://magiccards.info/" + printing.edition_id + "/en/" + printing.collectorsNumber;
   }
 
+  get colors() {
+    return ['W','U','B','R','G'].filter((color:string) {
+      return this.castingCost.match(color);
+    });
+  }
+
   toJson() {
     var obj = angular.copy(this);
     delete obj.rawHtml;
