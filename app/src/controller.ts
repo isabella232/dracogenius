@@ -135,8 +135,9 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
     console.log($scope.viewStyle);
   });
 
-  var activeSets = [sets["Core Set Editions"][0]].concat(sets["Innistrad Cycle"]).concat(sets["Return to Ravnica"]).map((arr) => arr[0]);
-  activeSets.forEach(function(set:string) {
+  var activeSets = [sets["Core Set Editions"][0]].concat(sets["Innistrad Cycle"]).concat(sets["Return to Ravnica"]);
+  activeSets.forEach(function(setData:string[]) {
+    var set = setData[0];
     CardFetcher.getCards(set).then((cards) => {
       $scope.addCards(cards);
     });

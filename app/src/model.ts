@@ -67,7 +67,7 @@ class Card {
   }
 
   static parseCardHtml(cardHtml:string, CardFetcher:CardFetcher):Card {
-    var r = /<span style="font-size: 1.2em;"><a href="\/(.*?)\/en\/(\d+[ab]?)\.html">(.*?)<\/a><\/span>/;
+    var r = /<span style="font-size: 1.2em;"><a href="\/(.*?)\/en\/(\d+[abcdefg]?)\.html">(.*?)<\/a><\/span>/;
     var match = cardHtml.match(r);
     var name = match[3];
     var edition_id = match[1];
@@ -76,13 +76,13 @@ class Card {
     match = cardHtml.match(r);
     var edition = match[1];
     var rarity = match[2];
-    r = /<p>(.*?),[\s\n]+ (X*[\d\{\}\/BWUGR]+)?( \((\d+)\))?<\/p>/;
+    r = /<p>(.*?),[\s\n]+ (X*Y*Z*[\d\{\}\/BWUGRP]*)?( \((\d+)\))?<\/p>/;
     match = cardHtml.match(r);
     var type = match[1];
     var castingCost = match[2];
     var cmc = parseInt(match[4], 10);
     if (isNaN(cmc)) {
-      cmc = null;
+      cmc = 0;
     }
     r = /<p class="ctext"><b>(.*?)<\/b><\/p>/;
     match = cardHtml.match(r);

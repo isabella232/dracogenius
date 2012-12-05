@@ -122,9 +122,12 @@ class CardFetcher {
         for (var name in values[1]) {
           this.tags[name] = values[1][name];
         }
-        return html
-          // split into cards
-          .match(/<td valign="top" width="25%">[^]+?<\/td>/gm)
+        var splitCards = html.match(/<td valign="top" width="25%">[^]+?<\/td>/gm)
+        if (!splitCards) {
+          console.error("Unable to split out cards from base HTML of", html);
+          return []
+        }
+        return splitCards
           // parse into Card objects
           .map((card) => {
             try {
@@ -134,8 +137,8 @@ class CardFetcher {
               }
               return card;
             } catch(e) {
-              console.log("can't parse card", JSON.stringify(card), " got error", e);
-              throw e;
+              console.error("can't parse card", JSON.stringify(card), " got error", e);
+              //throw e;
             }
           })
     });

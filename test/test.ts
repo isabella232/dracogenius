@@ -242,6 +242,34 @@ describe("Card.parseCardHtml", function() {
       {
         colors: []
       }
+    ],
+    [
+      "Act of Aggression",
+      {
+        castingCost: "3{RP}{RP}"
+      }
+    ],
+    [
+      "Chimeric Mass",
+      {
+        castingCost: "X",
+        cmc: 0
+      }
+    ],
+    [
+      "When (Who/What/When/Where/Why)",
+      {
+        printings: {
+          collectorsNumber: "120c"
+        }
+      }
+    ],
+    [
+      "The Ultimate Nightmare of Wizards of the Coast® Customer Service",
+      {
+        castingCost: "XYZRR",
+        cmc: 2
+      }
     ]
   ]
   examples.forEach((ex) => {
