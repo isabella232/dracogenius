@@ -361,3 +361,35 @@ describe("Random Util Functions", () => {
     expect(arrayIntersection(['a'], ['a'])).toEqual(['a']);
   })
 })
+
+describe("Deck.parse", () => {
+  it("works for a single card", () => {
+    var deck = new Deck();
+    deck.cards = [{name: "Swamp", count: 1}]
+    expect(Deck.parse("1 Swamp")).toEqual(deck);
+  });
+
+  it("works for a list of a few cards", () => {
+    var deck = new Deck();
+    deck.cards = [{name: "Mountain", count: 20},
+                  {name:"Lightning Bolt", count: 20}];
+    expect(Deck.parse("20 Mountain\n20 Lightning Bolt")).toEqual(deck);
+  });
+  it("parses the name of the deck", () => {
+    var deck = new Deck();
+    deck.name = "Just a Dumb Deck";
+    deck.cards = [{name: "Uncle Istvan", count: 4},
+                  {name: "Swamp", count: 24}]
+    var deckText = "Just a Dumb Deck\n\n4 Uncle Istvan\n24 Swamp";
+    expect(Deck.parse(deckText)).toEqual(deck);
+  });
+  it("treats blank lines and comments correctly", () => {
+    var deckText = "# Blue cards\n8 Island\n4 Lord of the Unreal\n\n#Black Cards\n8 Swamp\n4 Gravecrawler";
+    var deck = new Deck();
+    deck.cards = [{name: "Island", count:8},
+                  {name: "Lord of the Unreal", count: 4},
+                  {name: "Swamp", count: 8},
+                  {name: "Gravecrawler", count: 4}]
+    expect(Deck.parse(deckText)).toEqual(deck);
+  });
+});

@@ -657,3 +657,73 @@ var sets = {
         ["dcilm", "Legend Membership"],
   ],
 }
+
+interface DeckEntry {
+  count:number;
+  name:string;
+}
+
+class Deck {
+  cards:DeckEntry[];
+  sideboard:DeckEntry[] = [];
+  name:string;
+  static parse(decktext:string):Deck {
+    var deck = new Deck();
+    var deckTitle = withAction(
+      sequence([repeat1(negate(ch('\n'))), token('\n\n')]),
+      (ast) => ast[0].join('')
+    );
+    var deckEntry = withAction(
+      sequence([
+        repeat1(choice("0123456789".split('').map(ch))),
+        repeat1(choice(" \t".split('').map(ch))),
+        repeat1(negate(ch('\n'))),
+        choice([token('\n'), end_p])
+      ]),
+      (ast) => {
+        return {
+          count: parseInt(ast[0].join(''), 10),
+          name: ast[2].join('')
+        }
+      }
+    );
+    var skipBlanks = function(p) {
+      var commentLine : Parser = sequence(
+        [whitespace(ch('#')), repeat(negate(ch('\n')))]);
+      var blank = choice([ch('\n'), commentLine])
+      return withAction(
+        sequence([
+          repeat(blank),
+          p,
+          repeat(blank)
+        ]),
+        (ast) =>  {
+          if (ast[0].name) {
+            return ast[0];
+          } else if (ast[1].name) {
+            return ast[1];
+          }
+          throw new Error("Don't know how to handle " + ast);
+        }
+      );
+    };
+    var deckParser = withAction(
+      sequence([
+        optional(deckTitle),
+        repeat1(skipBlanks(deckEntry)),
+      ]),
+      (ast) => {
+        var deck = new Deck();
+        if (ast.length == 2) {
+          deck.name = ast.shift();
+        }
+        deck.cards = ast.shift();
+        return deck;
+      }
+    )
+    var result = deckParser(ps(decktext));
+    if (result) {
+      return result.ast;
+    }
+  }
+}

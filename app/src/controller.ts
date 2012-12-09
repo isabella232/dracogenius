@@ -27,6 +27,13 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
     });
   }
 
+  $scope.$watch('decktext', () => {
+    console.log($scope.decktext);
+    if ($scope.decktext) {
+      $scope.currentDeck = Deck.parse($scope.decktext);
+    }
+  });
+
   $scope.addGroupTag = () => {
     var tags = parseTags($scope.groupTag);
     $scope.cards.forEach((card:Card) {

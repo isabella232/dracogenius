@@ -68,6 +68,7 @@
     <header>
       <h2>DracoGenius</h2>
       <button ng-click="mode = 'search'">Search</button>
+      <button ng-click="mode = 'deck'">Deck</button>
       <button ng-click="mode = 'tag'">Tag</button>
       <button ng-click="mode = 'config'">Config</button>
     </header>
@@ -147,6 +148,11 @@
           <hr>
         </div> -->
       </div>
+    </section>
+
+    <section class='deckEditor' ng-show="mode == 'deck'">
+      <h4>Deck Editor</h4>
+      <textarea ng-model='decktext' style='width:50%; height:800px'></textarea>
     </section>
 
     <section class="singleCardTaggingPanel" ng-show="mode == 'tag'">

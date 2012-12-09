@@ -12,7 +12,9 @@ class JasmineExpectation {
 
 
 declare var describe: (name:string, f:()=>void)=>void;
+declare var xdescribe: (name:string, f:()=>void)=>void;
 declare var it: (name:string, f:()=>void)=>void;
+declare var xit: (name:string, f:()=>void)=>void;
 declare var beforeEach: (f:()=>void)=>void;
 
 declare var expect: (val:any)=>JasmineExpectation;
