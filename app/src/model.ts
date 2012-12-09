@@ -667,6 +667,37 @@ class Deck {
   cards:DeckEntry[];
   sideboard:DeckEntry[] = [];
   name:string;
+
+  get size() {
+    var result = 0;
+    this.cards.forEach((entry:DeckEntry) {
+      result += entry.count;
+    })
+    return result;
+  }
+
+  get warnings() {
+    var warnings = [];
+    this.cards.forEach((entry:DeckEntry) {
+      if (!(entry.name in fullCards)) {
+        warnings.push("Unknown card: " + entry.name);
+      }
+    });
+    return warnings;
+  }
+
+  get cardList() {
+    var list:Card[] = [];
+    this.cards.forEach((entry:DeckEntry) {
+      if (entry.name in fullCards) {
+        for (var i = 0; i < entry.count; i++) {
+          list.push(fullCards[entry.name]);
+        }
+      }
+    });
+    return list;
+  }
+
   static parse(decktext:string):Deck {
     var deck = new Deck();
     var deckTitle = withAction(

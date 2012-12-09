@@ -367,6 +367,7 @@ describe("Deck.parse", () => {
     var deck = new Deck();
     deck.cards = [{name: "Swamp", count: 1}]
     expect(Deck.parse("1 Swamp")).toEqual(deck);
+    expect(deck.size).toBe(1)
   });
 
   it("works for a list of a few cards", () => {
@@ -382,6 +383,7 @@ describe("Deck.parse", () => {
                   {name: "Swamp", count: 24}]
     var deckText = "Just a Dumb Deck\n\n4 Uncle Istvan\n24 Swamp";
     expect(Deck.parse(deckText)).toEqual(deck);
+    expect(deck.size).toBe(28)
   });
   it("treats blank lines and comments correctly", () => {
     var deckText = "# Blue cards\n8 Island\n4 Lord of the Unreal\n\n#Black Cards\n8 Swamp\n4 Gravecrawler";
@@ -391,5 +393,6 @@ describe("Deck.parse", () => {
                   {name: "Swamp", count: 8},
                   {name: "Gravecrawler", count: 4}]
     expect(Deck.parse(deckText)).toEqual(deck);
+    expect(deck.size).toBe(8 + 4 + 8 + 4)
   });
 });

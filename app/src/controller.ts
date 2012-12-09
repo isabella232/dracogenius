@@ -28,9 +28,24 @@ function CardSet(CardFetcher:CardFetcher, $scope) {
   }
 
   $scope.$watch('decktext', () => {
-    console.log($scope.decktext);
     if ($scope.decktext) {
-      $scope.currentDeck = Deck.parse($scope.decktext);
+      $scope.deck = Deck.parse($scope.decktext);
+    } else {
+      $scope.deck = null;
+    }
+  });
+
+  $scope.$watch('deck', () => {
+    if (!$scope.deck) {
+      $scope.deckStats = null;
+      return;
+    }
+    var list : Card[] = $scope.deck.cardList;
+    $scope.deckStats = {
+      cmc: new CMCFacet().getHistogram(list),
+      rarity: new RarityFacet().getHistogram(list),
+      tag: new TagFacet().getHistogram(list),
+      color: new ColorFacet().getHistogram(list)
     }
   });
 
