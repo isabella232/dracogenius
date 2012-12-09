@@ -192,14 +192,14 @@
     <section class='deckEditor' ng-show="mode == 'deck'">
       <h4>Deck Editor</h4>
       <div class='deckstats' style='float:right; width:45%'>
-        <h3>{{deck.name || "Unnamed Deck"}}</h3>
-        <small>{{deck.size || 0}} cards</small>
+        <h2>{{deck.name || "Unnamed Deck"}}</h2>
+        <h4>{{deck.size || 0}} cards</h4>
         <ul>
           <li ng-repeat="warning in deck.warnings">
             {{warning}}
           </li>
         </ul>
-        <h4><i class='icon-bar-chart'></i> Stats</h4>
+        <h3><i class='icon-bar-chart'></i> Stats</h3>
         <div class="facet">
           <label>Cost:</label>
           <table>

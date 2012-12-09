@@ -704,9 +704,10 @@ class Deck {
       sequence([repeat1(negate(ch('\n'))), token('\n\n')]),
       (ast) => ast[0].join('')
     );
+    var integer = choice("0123456789".split('').map(ch));
     var deckEntry = withAction(
       sequence([
-        repeat1(choice("0123456789".split('').map(ch))),
+        repeat1(integer),
         repeat1(choice(" \t".split('').map(ch))),
         repeat1(negate(ch('\n'))),
         choice([token('\n'), end_p])
@@ -720,7 +721,7 @@ class Deck {
     );
     var skipBlanks = function(p) {
       var commentLine : Parser = sequence(
-        [whitespace(ch('#')), repeat(negate(ch('\n')))]);
+        [whitespace(negate(integer)), repeat(negate(ch('\n')))]);
       var blank = choice([ch('\n'), commentLine])
       return withAction(
         sequence([
