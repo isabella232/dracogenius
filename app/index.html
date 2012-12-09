@@ -60,6 +60,9 @@
     span.brand {
       cursor: default;
     }
+    input.search {
+      width: 400px;
+    }
   </style>
 </head>
 
@@ -72,32 +75,59 @@
       <div class="navbar-inner">
         <span class="brand" href="#">Dracogenius</span>
         <ul class="nav">
-          <li ng-class="{'search':'active'}[mode]"><a ng-click="mode = 'search'" href="#">Search</a></li>
-          <li ng-class="{'deck':'active'}[mode]"><a ng-click="mode = 'deck'" href="#">Deck</a></li>
-          <li ng-class="{'tag':'active'}[mode]"><a ng-click="mode = 'tag'" href="#">Tag</a></li>
-          <li ng-class="{'config':'active'}[mode]"><a ng-click="mode = 'config'" href="#">Config</a></li>
+          <li ng-class="{'search':'active'}[mode]">
+            <a ng-click="mode = 'search'" href="#">
+              <i class='icon-search'></i>
+              Search
+            </a>
+          </li>
+          <li ng-class="{'deck':'active'}[mode]">
+            <a ng-click="mode = 'deck'" href="#">
+              <i class='icon-briefcase'></i>
+              Deck
+            </a>
+          </li>
+          <li ng-class="{'tag':'active'}[mode]">
+            <a ng-click="mode = 'tag'" href="#">
+              <i class='icon-tag'></i>
+              Tag
+            </a>
+          </li>
+          <li ng-class="{'config':'active'}[mode]">
+            <a ng-click="mode = 'config'" href="#">
+              <i class='icon-cog'></i>
+              Config
+            </a>
+          </li>
         </ul>
       </div>
     </div>
 
     <section class="searchPanel" ng-show="mode == 'search'">
-      <input ng-model="search"></input>
+      <i class='icon-search'></i>
+      <input ng-model="search" placeholder="Search for cards..." class='search'></input>
       <div>
         <strong>{{cards.length}}</strong> cards<span ng-show="search.length">
           match your search</span>.
       </div>
       <div ng-show="search.length">
         <hr>
-        Tag {{cards.length}} cards:
+        <i class='icon-tags'></i> Tag {{cards.length}} cards:
         <input ng-model="groupTag" ui-keypress="{'enter':'addGroupTag()'}">
         </input>
-        <button ng-click='addGroupTag()'>Add</button>
-        <button ng-click='removeGroupTag()'>Remove</button>
+        <button ng-click='addGroupTag()' class='btn'>
+          <i class='icon-plus-sign'></i>
+          Add
+        </button>
+        <button ng-click='removeGroupTag()' class='btn'>
+          <i class='icon-remove'></i>
+          Remove
+        </button>
       </div>
 
 
       <hr>
-      <h4>Stats</h4>
+      <h4><i class='icon-bar-chart'></i> Stats</h4>
       <div class="facet">
         <label>Converted Mana Cost:</label>
         <table>
