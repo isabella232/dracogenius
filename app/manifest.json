@@ -1,6 +1,6 @@
 {
   "name": "Dracogenius",
-  "version": "0.3.11",
+  "version": "0.5.0",
   "manifest_version": 2,
   "description": "A Magic the Gathering analysis and search tool.",
   "icons": {
