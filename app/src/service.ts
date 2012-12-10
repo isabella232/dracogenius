@@ -187,8 +187,40 @@ DGservice.factory('CardFetcher', (CachingHttp:CachingHttp, PermanantStorage:Perm
 DGservice.factory('PermanantStorage', ($q, $rootScope) => {
   return new PermanantStorage($q, $rootScope);
 });
-//TODO(rictic): this doesn't seem to be working
 DGservice.filter("pretty", () => (obj) => JSON.stringify(obj, null, 2));
+console.log('lol');
+DGservice.directive("colorSymbol", () => {
+  var map = {
+    R: "red",
+    G: "green",
+    U: "blue",
+    B: "black",
+    W: "white"
+  }
+
+  return {
+    link: (scope, elem, attrs) => {
+      elem = elem[0];
+      scope.$watch(attrs.colorSymbol, (_, color) => {
+        console.log(color);
+        if (!(color in map)) {
+          return;
+        }
+        var name = map[color];
+
+        var image = new Image();
+        image.src = "/icons/" + name + ".png";
+        image.className = "colorSymbol";
+        image.title = name + " mana";
+        image.alt = image.title;
+
+        //Remove text for node
+        elem.childNodes[0].remove();
+        elem.appendChild(image);
+      });
+    }
+  }
+})
 
 var DracoGenius = angular.module('DG', ['DG.service', 'scroll', 'ui']);
 
